@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(sips:*)",
+      "Bash(npm run dev:*)",
+      "Bash(TURBOPACK=0 npm run dev:*)",
+      "Bash(npx next dev:*)",
+      "Bash(claude mcp:*)",
+      "Bash(cat:*)",
+      "Bash(npx playwright install chromium)",
+      "Bash(lsof:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

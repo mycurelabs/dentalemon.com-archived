@@ -1,95 +1,129 @@
 'use client'
 
+import Image from "next/image"
 import { motion } from "framer-motion"
+import { Shield, Cloud, Heart, Check } from "lucide-react"
 
-const stats = [
-  { number: "10,000+", label: "Happy Patients" },
-  { number: "25+", label: "Years Experience" },
-  { number: "50+", label: "Expert Dentists" },
-  { number: "98%", label: "Satisfaction Rate" },
-]
-
-const testimonials = [
+const features = [
   {
-    name: "Sarah Johnson",
-    role: "Patient since 2020",
-    content: "Best dental experience ever! The team is professional and caring.",
+    icon: Shield,
+    title: "Secure Patient Data Management",
+    description: "Built with enterprise-grade security to help your clinic protect sensitive patient information with HIPAA-compliant systems, encrypted storage, and comprehensive access controls.",
+    bullets: [
+      "Encrypted electronic health records with role-based access controls",
+      "HIPAA-compliant infrastructure meeting healthcare security standards",
+      "Audit trails and activity logs ensuring data accountability",
+    ],
+    imagePosition: "left" as const,
+    image: "/features/Hipaa-compliance-mycure.webp",
   },
   {
-    name: "Michael Chen",
-    role: "Patient since 2019",
-    content: "They transformed my smile. Highly recommend DentaLemon!",
+    icon: Cloud,
+    title: "Seamless Offline Operations",
+    description: "Continue managing your practice without interruption, even during internet outages. Work confidently with automatic synchronization when connectivity restores.",
+    bullets: [
+      "Offline access to patient records and treatment history",
+      "Automatic sync when connection restores, preventing data loss",
+      "Continue scheduling, charting, and billing without interruption",
+    ],
+    imagePosition: "right" as const,
+    image: "/features/mycure-syncbase-demo.mp4",
   },
   {
-    name: "Emma Davis",
-    role: "Patient since 2021",
-    content: "Pain-free treatments and amazing results. Thank you!",
+    icon: Heart,
+    title: "Enhanced Patient Experience",
+    description: "Empower your clinic to deliver exceptional patient care with tools that improve communication, reduce wait times, and create seamless appointment experiences.",
+    bullets: [
+      "Online booking and automated appointment reminders",
+      "Patient portal for easy access to records and communication",
+      "Streamlined check-in process reducing patient wait times",
+    ],
+    imagePosition: "left" as const,
+    image: "/features/effortless-clinical-workflows-v3.png",
   },
 ]
 
 export function SocialProof() {
   return (
-    <section className="w-full py-16 md:py-24 bg-muted/50">
-      <div className="container px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4">
-            Trusted by Thousands
+    <section id="why-choose-us" className="w-full py-20 md:py-32">
+      <div className="container px-6">
+        {/* Section Header */}
+        <div className="flex flex-col items-center text-center mb-16">
+          <div className="inline-flex items-center justify-center px-3 py-1 mb-4 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20">
+            Why Choose Dentalemon
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Built for Modern Dental Care
           </h2>
-          <p className="text-gray-500 md:text-lg dark:text-gray-400">
-            Join our community of satisfied patients
+          <p className="max-w-[800px] text-muted-foreground md:text-lg">
+            Powerful practice management tools designed to streamline operations, protect patient data, and enhance care delivery.
           </p>
-        </motion.div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                {stat.number}
-              </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </motion.div>
-          ))}
         </div>
 
-        {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-background p-6 rounded-lg shadow-sm"
-            >
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-primary text-xl">★</span>
-                ))}
-              </div>
-              <p className="text-sm mb-4 text-muted-foreground">
-                &quot;{testimonial.content}&quot;
-              </p>
-              <div>
-                <div className="font-semibold">{testimonial.name}</div>
-                <div className="text-xs text-muted-foreground">{testimonial.role}</div>
-              </div>
-            </motion.div>
-          ))}
+        {/* Features - Alternating Layout */}
+        <div className="space-y-20">
+          {features.map((feature, index) => {
+            const Icon = feature.icon
+            const isImageLeft = feature.imagePosition === "left"
+
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="grid lg:grid-cols-2 gap-12 items-center"
+              >
+                {/* Feature Image */}
+                <div className={`${isImageLeft ? 'order-2 lg:order-1' : 'lg:order-2'} relative`}>
+                  {feature.image.endsWith('.mp4') ? (
+                    <video
+                      src={feature.image}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="rounded-xl w-full h-auto object-cover"
+                      style={{
+                        transform: 'scale(1.02)',
+                        transformOrigin: 'center',
+                        clipPath: 'inset(0 2px 0 2px)'
+                      }}
+                      aria-label={`${feature.title} Demo`}
+                    />
+                  ) : (
+                    <Image
+                      src={feature.image}
+                      alt={feature.title}
+                      width={480}
+                      height={320}
+                      className="rounded-xl w-full h-auto"
+                    />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className={`${isImageLeft ? 'order-1 lg:order-2' : 'lg:order-1'} space-y-6`}>
+                  <div className="space-y-4">
+                    <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                      <Icon className="size-6" />
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-bold">{feature.title}</h3>
+                    <p className="text-muted-foreground text-lg">{feature.description}</p>
+                  </div>
+                  <ul className="space-y-3">
+                    {feature.bullets.map((bullet, bulletIndex) => (
+                      <li key={bulletIndex} className="flex items-start gap-3">
+                        <Check className="size-5 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-muted-foreground">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

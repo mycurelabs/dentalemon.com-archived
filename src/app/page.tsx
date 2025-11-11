@@ -12,8 +12,8 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <SocialProof />
         <Features />
+        <SocialProof />
         <Pricing />
         <CTA />
       </main>

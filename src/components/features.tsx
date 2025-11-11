@@ -5,41 +5,41 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 const features = [
   {
-    icon: "🦷",
-    title: "General Dentistry",
-    description: "Comprehensive dental care for the whole family, from routine checkups to preventive treatments.",
+    icon: "📅",
+    title: "Appointment Scheduling",
+    description: "Intelligent scheduling system with online booking, automated reminders, and calendar management to reduce no-shows and optimize your practice flow.",
   },
   {
-    icon: "✨",
-    title: "Cosmetic Dentistry",
-    description: "Transform your smile with teeth whitening, veneers, and other cosmetic procedures.",
+    icon: "📊",
+    title: "Patient Records Management",
+    description: "Comprehensive digital health records with treatment history, clinical notes, and document management for complete patient information at your fingertips.",
   },
   {
-    icon: "🔧",
-    title: "Orthodontics",
-    description: "Straighten your teeth with traditional braces or modern clear aligners.",
+    icon: "💳",
+    title: "Billing & Payments",
+    description: "Streamlined billing processes with insurance claim management, payment tracking, and financial reporting to keep your practice financially healthy.",
   },
   {
-    icon: "🏥",
-    title: "Emergency Care",
-    description: "24/7 emergency dental services for urgent dental problems and accidents.",
+    icon: "📱",
+    title: "Patient Portal",
+    description: "Give your patients 24/7 access to their records, appointment booking, and secure messaging to enhance engagement and satisfaction.",
   },
   {
-    icon: "👶",
-    title: "Pediatric Dentistry",
-    description: "Specialized care for children in a friendly and comfortable environment.",
+    icon: "📈",
+    title: "Analytics & Reporting",
+    description: "Powerful insights into practice performance, revenue trends, and operational metrics to make data-driven decisions for growth.",
   },
   {
-    icon: "💎",
-    title: "Dental Implants",
-    description: "Permanent tooth replacement solutions that look and feel natural.",
+    icon: "🔔",
+    title: "Automated Communications",
+    description: "Smart notification system for appointment reminders, follow-ups, and patient engagement campaigns via SMS, email, and push notifications.",
   },
 ]
 
 export function Features() {
   return (
-    <section id="features" className="w-full py-16 md:py-24">
-      <div className="container px-4 md:px-6">
+    <section id="features" className="w-full py-20 md:py-32 bg-muted/50">
+      <div className="container px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -47,11 +47,11 @@ export function Features() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4">
-            Our Services
+          <h2 className="text-3xl font-bold tracking-tight leading-tight md:text-5xl lg:text-6xl mb-6">
+            Core Features
           </h2>
-          <p className="mx-auto max-w-[700px] text-gray-500 md:text-lg dark:text-gray-400">
-            Comprehensive dental care tailored to your needs
+          <p className="mx-auto max-w-[800px] text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Everything your dental practice needs to operate efficiently and deliver exceptional patient care
           </p>
         </motion.div>
 
@@ -64,13 +64,13 @@ export function Features() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="h-full hover:shadow-lg transition-shadow">
+              <Card className="h-full bg-card border-border/40 hover:shadow-md transition-all duration-300 hover:scale-105">
                 <CardHeader>
                   <div className="text-4xl mb-2">{feature.icon}</div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                  <CardTitle className="text-xl md:text-2xl tracking-tight">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-base">
+                  <CardDescription className="text-base leading-relaxed">
                     {feature.description}
                   </CardDescription>
                 </CardContent>

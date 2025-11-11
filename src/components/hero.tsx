@@ -1,26 +1,35 @@
 'use client'
 
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { ShimmerButton } from "@/components/magicui/shimmer-button"
 import { motion } from "framer-motion"
+import { ChevronRight } from "lucide-react"
 
 export function Hero() {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
-    <section className="relative w-full py-20 md:py-32 lg:py-40 overflow-hidden">
-      <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center space-y-8 text-center">
+    <section id="hero" className="relative w-full py-20 md:py-32 overflow-hidden">
+      <div className="container px-6">
+        <div className="flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-4"
+            transition={{ duration: 0.7 }}
+            className="space-y-6 max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-              Your Smile, Our{" "}
-              <span className="text-primary">Passion</span>
+            <h1 className="text-4xl font-bold tracking-tight leading-tight md:text-6xl lg:text-7xl">
+              Run Your Dental Practice{" "}
+              <span className="text-primary">Without the Paperwork</span>
             </h1>
-            <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-              Experience world-class dental care with cutting-edge technology and compassionate professionals. 
-              Transform your smile today.
+            <p className="mx-auto max-w-[800px] text-base sm:text-lg text-muted-foreground leading-relaxed">
+              Automate scheduling, billing, and patient records so you can focus on patient care and growing your practice.
             </p>
           </motion.div>
 
@@ -28,13 +37,23 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-4 mt-12"
           >
-            <Button size="lg" className="text-base">
-              Schedule Consultation
-            </Button>
-            <Button size="lg" variant="outline" className="text-base">
-              Learn More
+            <ShimmerButton
+              background="#FFCC5E"
+              shimmerColor="#ffffff"
+              className="h-11 px-8 text-sm sm:text-base font-semibold rounded-full"
+            >
+              Schedule a Demo
+              <ChevronRight className="ml-1 size-4" />
+            </ShimmerButton>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-base font-semibold rounded-full h-11 px-6 hover:bg-secondary transition-all duration-300"
+              onClick={() => scrollToSection('pricing')}
+            >
+              View Pricing
             </Button>
           </motion.div>
 
@@ -44,11 +63,15 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="w-full max-w-4xl mt-12"
           >
-            <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl bg-gradient-to-br from-primary/20 to-primary/5">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-6xl">🦷</div>
-              </div>
-            </div>
+            <Image
+              src="/dentalemon-ui-prepped.png"
+              alt="DentaLemon Application Interface"
+              width={1920}
+              height={1080}
+              className="w-full h-auto rounded-xl shadow-2xl"
+              priority
+              quality={95}
+            />
           </motion.div>
         </div>
       </div>
