@@ -1,36 +1,37 @@
 'use client'
 
 import { motion } from "framer-motion"
+import { Calendar, BarChart3, CreditCard, Smartphone, TrendingUp, Bell, LucideIcon } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-const features = [
+const features: { icon: LucideIcon; title: string; description: string }[] = [
   {
-    icon: "📅",
+    icon: Calendar,
     title: "Appointment Scheduling",
     description: "Intelligent scheduling system with online booking, automated reminders, and calendar management to reduce no-shows and optimize your practice flow.",
   },
   {
-    icon: "📊",
+    icon: BarChart3,
     title: "Patient Records Management",
     description: "Comprehensive digital health records with treatment history, clinical notes, and document management for complete patient information at your fingertips.",
   },
   {
-    icon: "💳",
+    icon: CreditCard,
     title: "Billing & Payments",
     description: "Streamlined billing processes with insurance claim management, payment tracking, and financial reporting to keep your practice financially healthy.",
   },
   {
-    icon: "📱",
+    icon: Smartphone,
     title: "Patient Portal",
     description: "Give your patients 24/7 access to their records, appointment booking, and secure messaging to enhance engagement and satisfaction.",
   },
   {
-    icon: "📈",
+    icon: TrendingUp,
     title: "Analytics & Reporting",
     description: "Powerful insights into practice performance, revenue trends, and operational metrics to make data-driven decisions for growth.",
   },
   {
-    icon: "🔔",
+    icon: Bell,
     title: "Automated Communications",
     description: "Smart notification system for appointment reminders, follow-ups, and patient engagement campaigns via SMS, email, and push notifications.",
   },
@@ -66,7 +67,9 @@ export function Features() {
             >
               <Card className="h-full bg-card border-border/40 hover:shadow-md transition-all duration-300 hover:scale-105">
                 <CardHeader>
-                  <div className="text-4xl mb-2">{feature.icon}</div>
+                  <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+                    <feature.icon className="size-6" />
+                  </div>
                   <CardTitle className="text-xl md:text-2xl tracking-tight">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>

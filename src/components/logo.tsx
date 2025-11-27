@@ -17,7 +17,7 @@ export function Logo({ size = 'md', className = '' }: LogoProps) {
   return (
     <Image
       src="/logo.png"
-      alt="DentaLemon Logo"
+      alt="Dentalemon Logo"
       width={dimensions.width}
       height={dimensions.height}
       className={className}

@@ -21,7 +21,7 @@ export function CTA() {
               Ready to Transform Your Practice?
             </h2>
             <p className="mx-auto max-w-[768px] text-base sm:text-lg text-primary-foreground/90 leading-relaxed mb-12">
-              Join modern dental practices using DentaLemon to streamline operations and deliver exceptional patient care.
+              Join modern dental practices using Dentalemon to streamline operations and deliver exceptional patient care.
               Schedule a personalized demo today!
             </p>
             <div className="flex justify-center">

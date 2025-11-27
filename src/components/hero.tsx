@@ -65,7 +65,7 @@ export function Hero() {
           >
             <Image
               src="/dentalemon-ui-prepped.png"
-              alt="DentaLemon Application Interface"
+              alt="Dentalemon Application Interface"
               width={1920}
               height={1080}
               className="w-full h-auto rounded-xl shadow-2xl"

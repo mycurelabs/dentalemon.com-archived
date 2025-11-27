@@ -49,7 +49,7 @@ export function SocialProof() {
       <div className="container px-6">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center justify-center px-3 py-1 mb-4 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20">
+          <div className="inline-flex items-center justify-center px-3 py-1 mb-4 text-xs font-medium bg-[#fffbeb] text-[#b45309] rounded-full border border-[#fde68a]">
             Why Choose Dentalemon
           </div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">

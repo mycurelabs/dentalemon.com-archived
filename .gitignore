@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#claude-stuff
+sticky-scroll-section-prompt.md
+.claude
+.playwright-mcp
+playwright-inspection.js 
+playwright-navbar-analysis.js

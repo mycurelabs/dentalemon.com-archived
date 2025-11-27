@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
 import { SocialProof } from "@/components/social-proof"
+import { StickyFeatures } from "@/components/sticky-features"
 import { Features } from "@/components/features"
 import { Pricing } from "@/components/pricing"
 import { CTA } from "@/components/cta"
@@ -14,6 +15,7 @@ export default function Home() {
         <Hero />
         <Features />
         <SocialProof />
+        <StickyFeatures />
         <Pricing />
         <CTA />
       </main>

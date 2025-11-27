@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Block access to Next.js internals
+Disallow: /_next/
+Disallow: /api/
+
+Sitemap: https://dentalemon.com/sitemap.xml
