@@ -1,29 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node:*)",
-      "Bash(npm install:*)",
-      "Bash(npm run build:*)",
-      "Bash(sips:*)",
-      "Bash(npm run dev:*)",
-      "Bash(TURBOPACK=0 npm run dev:*)",
-      "Bash(npx next dev:*)",
-      "Bash(claude mcp:*)",
-      "Bash(cat:*)",
-      "Bash(npx playwright install chromium)",
-      "Bash(lsof:*)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: rebrand to Dentalemon and improve B2B SaaS positioning\n\nBREAKING CHANGE: Brand name changed from DentaLemon to Dentalemon\n\n- Rebrand from DentaLemon to Dentalemon across all components\n- Update hero heading to action-oriented \"Run Your Dental Practice Without the Paperwork\"\n- Simplify hero subheading to focus on core automation benefits\n- Change Enhanced Patient Experience image position from right to left for balanced alternating layout\n- Reduce navbar menu item gap from gap-6 to gap-3 for tighter spacing\n- Maintain B2B SaaS language throughout all components\n\nComponents updated:\n- navbar.tsx: Brand name, menu gap reduction\n- footer.tsx: Brand name in multiple locations\n- social-proof.tsx: Brand name, image position\n- hero.tsx: Actionable heading and concise subheading\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push:*)",
-      "Bash(tree:*)",
-      "Bash(ls:*)",
-      "Bash(curl:*)",
-      "Bash(find:*)",
-      "Bash(npm audit:*)",
-      "Bash(git -C /Users/vjescutin/Documents/dentalemon.com log --oneline -10)",
-      "Bash(git -C /Users/vjescutin/Documents/dentalemon.com remote -v)",
-      "Bash(xargs ls:*)",
-      "Bash(xargs cat:*)",
-      "Bash(sort:*)"
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
