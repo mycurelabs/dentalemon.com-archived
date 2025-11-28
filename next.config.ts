@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
   // Disable source maps in production to prevent code exposure
   productionBrowserSourceMaps: false,
 
-  // Backup security headers (middleware is primary)
+  // Backup security headers (proxy.ts is primary)
+  // Note: X-XSS-Protection is deprecated - CSP handles XSS protection
   async headers() {
     return [
       {
@@ -12,7 +13,6 @@ const nextConfig: NextConfig = {
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],
       },
