@@ -2,10 +2,7 @@
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig = {
-  // Build checks enabled for production quality
-  eslint: {
-    ignoreDuringBuilds: process.env.NODE_ENV !== 'production',
-  },
+  // Note: eslint config removed in Next.js 16 - use ESLint directly
   typescript: {
     ignoreBuildErrors: process.env.NODE_ENV !== 'production',
   },
