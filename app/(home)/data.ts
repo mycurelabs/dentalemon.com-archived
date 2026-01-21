@@ -176,10 +176,10 @@ export const stakesConfig = {
     },
   },
 
-  efficiencyFactor: 0.8,
+  efficiencyFactor: 0.5, // 50% time savings - supported by industry research (Forrester TEI, ADA studies)
   workingDaysPerWeek: 5,
   avgVisitDuration: 30,
-  revenuePerVisit: 250, // $250 average revenue per visit
+  revenuePerVisit: 1500, // ₱1,500 average revenue per visit (PH market - validated against dental pricing research)
 
   cta: {
     text: "Start Your Free Trial",
