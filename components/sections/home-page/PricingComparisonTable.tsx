@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
+import { useMemo } from "react"
 import { motion } from "framer-motion"
-import { Check, X, HelpCircle, ArrowRight, ChevronRight } from "lucide-react"
+import { Check, X, ArrowRight, ChevronRight } from "lucide-react"
 import { AnimatedBadge } from "@/components/custom/animated-badge"
 import { ShimmerButton } from "@/components/magicui/shimmer-button"
 import { Button } from "@/components/ui/button"
@@ -14,47 +15,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { brandConfig } from "@/config/brand"
+import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
-
-const { urls } = brandConfig
-
-interface PricingPlan {
-  name: string
-  tier: "good" | "better" | "best"
-  price: string
-  period: string
-  description: string
-  popular: boolean
-  ctaText: string
-  ctaHref?: string
-}
-
-interface FeatureComparisonItem {
-  name: string
-  tooltip?: string
-  starter: boolean | string
-  professional: boolean | string
-  enterprise: boolean | string
-}
-
-interface FeatureComparisonCategory {
-  category: string
-  items: FeatureComparisonItem[]
-}
+import {
+  usePackages,
+  formatPrice,
+  formatInterval,
+  filterMainPackages,
+} from "@/lib/hooks/use-packages"
+import { useRuntimeConfig, buildSignUpUrl } from "@/lib/hooks/use-runtime-config"
 
 interface PricingComparisonConfig {
   badge?: string
   headline: string
   description: string
-  plans: PricingPlan[]
-  featureCategories: FeatureComparisonCategory[]
   guarantee: string
   transitionalCta: {
     text: string
@@ -67,26 +41,141 @@ interface PricingComparisonTableProps {
   config: PricingComparisonConfig
 }
 
-function FeatureValue({ value }: { value: boolean | string }) {
-  if (typeof value === "boolean") {
-    return value ? (
-      <Check className="size-5 text-amber-600" />
-    ) : (
-      <X className="size-5 text-muted-foreground/40" />
+interface DisplayPlan {
+  id: string
+  name: string
+  price: string
+  period: string
+  description: string
+  popular: boolean
+  features: string[]
+  entitlementCodes: Set<string>
+}
+
+function FeatureValue({ included }: { included: boolean }) {
+  return included ? (
+    <Check className="size-5 text-amber-600" />
+  ) : (
+    <X className="size-5 text-muted-foreground/40" />
+  )
+}
+
+/**
+ * Loading skeleton for pricing table
+ */
+function PricingTableSkeleton() {
+  return (
+    <div className="max-w-5xl mx-auto">
+      <div className="text-center md:text-left mb-12">
+        <Skeleton className="h-8 w-32 mb-4 bg-amber-200/50 dark:bg-amber-800/30" />
+        <Skeleton className="h-12 w-80 mb-4 bg-amber-200/50 dark:bg-amber-800/30" />
+        <Skeleton className="h-6 w-96 bg-amber-200/50 dark:bg-amber-800/30" />
+      </div>
+
+      {/* Desktop skeleton */}
+      <div className="hidden md:block">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="p-4 text-left w-[280px]"></th>
+                {[0, 1, 2].map((i) => (
+                  <th key={i} className="p-4 text-center min-w-[160px]">
+                    <div className="space-y-3">
+                      <Skeleton className="h-6 w-24 mx-auto bg-amber-200/50 dark:bg-amber-800/30" />
+                      <Skeleton className="h-10 w-28 mx-auto bg-amber-200/50 dark:bg-amber-800/30" />
+                      <Skeleton className="h-4 w-20 mx-auto bg-amber-200/50 dark:bg-amber-800/30" />
+                      <Skeleton className="h-10 w-full bg-amber-200/50 dark:bg-amber-800/30" />
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[1, 2, 3, 4, 5].map((row) => (
+                <tr key={row} className="border-b border-border/30">
+                  <td className="p-4">
+                    <Skeleton className="h-4 w-40 bg-amber-200/50 dark:bg-amber-800/30" />
+                  </td>
+                  {[0, 1, 2].map((col) => (
+                    <td key={col} className="p-4 text-center">
+                      <Skeleton className="h-5 w-5 mx-auto rounded-full bg-amber-200/50 dark:bg-amber-800/30" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Mobile skeleton */}
+      <div className="md:hidden max-w-lg mx-auto">
+        <Skeleton className="h-12 w-full mb-6 rounded-xl bg-amber-200/50 dark:bg-amber-800/30" />
+        <Skeleton className="h-64 w-full rounded-xl bg-amber-200/50 dark:bg-amber-800/30" />
+      </div>
+    </div>
+  )
+}
+
+export function PricingComparisonTable({
+  config,
+}: PricingComparisonTableProps) {
+  const { packages, loading: packagesLoading } = usePackages()
+  const { config: runtimeConfig, isLoading: configLoading } = useRuntimeConfig()
+
+  const loading = packagesLoading || configLoading
+
+  // Build plans from API packages
+  const plans: DisplayPlan[] = useMemo(() => {
+    const mainPackages = filterMainPackages(packages)
+    return mainPackages.map((pkg, index) => ({
+      id: pkg.id,
+      name: pkg.name,
+      price: pkg.billingConfig
+        ? formatPrice(pkg.billingConfig.unitAmount, pkg.billingConfig.currency)
+        : "Custom",
+      period: pkg.billingConfig
+        ? formatInterval(
+            pkg.billingConfig.interval,
+            pkg.billingConfig.intervalCount || 1
+          )
+        : "pricing",
+      description: pkg.description,
+      popular: index === 1,
+      features: pkg.entitlements.map((e) => e.name),
+      entitlementCodes: new Set(pkg.entitlements.map((e) => e.code)),
+    }))
+  }, [packages])
+
+  // Build feature comparison matrix from entitlements
+  const allEntitlements = useMemo(() => {
+    const mainPackages = filterMainPackages(packages)
+    const seen = new Map<string, string>() // code -> name
+    for (const pkg of mainPackages) {
+      for (const e of pkg.entitlements) {
+        if (!seen.has(e.code)) {
+          seen.set(e.code, e.name)
+        }
+      }
+    }
+    return Array.from(seen.entries()).map(([code, name]) => ({ code, name }))
+  }, [packages])
+
+  const getPlanCtaHref = (planId: string): string => {
+    return buildSignUpUrl(runtimeConfig.accountUrl, planId)
+  }
+
+  // Loading or empty: show skeleton
+  if (loading || plans.length === 0) {
+    return (
+      <section id="pricing" className="w-full py-20 md:py-32 bg-muted/50">
+        <div className="container px-4 sm:px-6 md:px-8">
+          <PricingTableSkeleton />
+        </div>
+      </section>
     )
   }
-  return <span className="text-sm font-medium text-foreground">{value}</span>
-}
-
-// Map tier to feature key
-const tierToKey: Record<string, "starter" | "professional" | "enterprise"> = {
-  good: "starter",
-  better: "professional",
-  best: "enterprise",
-}
-
-export function PricingComparisonTable({ config }: PricingComparisonTableProps) {
-  const planKeys = ["starter", "professional", "enterprise"] as const
 
   return (
     <section id="pricing" className="w-full py-20 md:py-32 bg-muted/50">
@@ -118,18 +207,18 @@ export function PricingComparisonTable({ config }: PricingComparisonTableProps) 
         >
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
-              {/* Plan Headers */}
               <thead>
                 <tr>
                   <th className="p-4 text-left w-[280px]">
                     <span className="sr-only">Feature</span>
                   </th>
-                  {config.plans.map((plan, index) => (
+                  {plans.map((plan, index) => (
                     <th
-                      key={plan.name}
+                      key={plan.id}
                       className={cn(
                         "p-4 text-center min-w-[160px]",
-                        plan.popular && "bg-amber-50 dark:bg-amber-900/20 rounded-t-xl"
+                        plan.popular &&
+                          "bg-amber-50 dark:bg-amber-900/20 rounded-t-xl"
                       )}
                     >
                       <motion.div
@@ -144,30 +233,40 @@ export function PricingComparisonTable({ config }: PricingComparisonTableProps) 
                             Most Popular
                           </span>
                         )}
-                        <div className="text-lg font-serif font-bold">{plan.name}</div>
+                        <div className="text-lg font-serif font-bold">
+                          {plan.name}
+                        </div>
                         <div className="text-2xl md:text-3xl font-serif font-bold text-foreground">
                           {plan.price}
                         </div>
-                        <div className="text-sm text-muted-foreground">{plan.period}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {plan.period}
+                        </div>
                         <div className="pt-2">
                           {plan.popular ? (
-                            <Link href={plan.ctaHref || urls.demo} className="block">
+                            <Link
+                              href={getPlanCtaHref(plan.id)}
+                              className="block"
+                            >
                               <ShimmerButton
                                 background="rgba(217, 119, 6, 1)"
                                 shimmerColor="#FEF3C7"
                                 className="w-full h-10 px-4 text-sm font-semibold"
                               >
-                                {plan.ctaText}
+                                Get Started
                                 <ArrowRight className="ml-1 size-4" />
                               </ShimmerButton>
                             </Link>
                           ) : (
-                            <Link href={plan.ctaHref || urls.demo} className="block">
+                            <Link
+                              href={getPlanCtaHref(plan.id)}
+                              className="block"
+                            >
                               <Button
                                 variant="outline"
                                 className="w-full h-10 px-4 text-sm font-semibold rounded-full"
                               >
-                                {plan.ctaText}
+                                Get Started
                                 <ChevronRight className="ml-1 size-4" />
                               </Button>
                             </Link>
@@ -179,66 +278,35 @@ export function PricingComparisonTable({ config }: PricingComparisonTableProps) 
                 </tr>
               </thead>
 
-              {/* Feature Categories */}
               <tbody>
-                <TooltipProvider>
-                  {config.featureCategories.map((category, catIndex) => (
-                    <>
-                      {/* Category Header */}
-                      <tr key={`cat-${catIndex}`}>
-                        <td
-                          colSpan={4}
-                          className="pt-8 pb-3 px-4 text-sm font-semibold text-muted-foreground uppercase tracking-wide border-b border-border/50"
-                        >
-                          {category.category}
-                        </td>
-                      </tr>
-
-                      {/* Feature Rows */}
-                      {category.items.map((item, itemIndex) => (
-                        <tr
-                          key={`${catIndex}-${itemIndex}`}
-                          className="border-b border-border/30 hover:bg-muted/30 transition-colors"
-                        >
-                          {/* Feature Name */}
-                          <td className="p-4 text-sm font-medium text-foreground">
-                            <div className="flex items-center gap-2">
-                              {item.name}
-                              {item.tooltip && (
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <HelpCircle className="size-4 text-muted-foreground/60" />
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="max-w-[200px] text-sm">{item.tooltip}</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              )}
-                            </div>
-                          </td>
-
-                          {/* Plan Values */}
-                          {planKeys.map((planKey, planIndex) => {
-                            const plan = config.plans[planIndex]
-                            return (
-                              <td
-                                key={planKey}
-                                className={cn(
-                                  "p-4 text-center",
-                                  plan.popular && "bg-amber-50/50 dark:bg-amber-900/10"
-                                )}
-                              >
-                                <div className="flex justify-center">
-                                  <FeatureValue value={item[planKey]} />
-                                </div>
-                              </td>
-                            )
-                          })}
-                        </tr>
-                      ))}
-                    </>
-                  ))}
-                </TooltipProvider>
+                {allEntitlements.map((entitlement, idx) => (
+                  <tr
+                    key={entitlement.code}
+                    className="border-b border-border/30 hover:bg-muted/30 transition-colors"
+                  >
+                    <td className="p-4 text-sm font-medium text-foreground">
+                      {entitlement.name}
+                    </td>
+                    {plans.map((plan) => (
+                      <td
+                        key={plan.id}
+                        className={cn(
+                          "p-4 text-center",
+                          plan.popular &&
+                            "bg-amber-50/50 dark:bg-amber-900/10"
+                        )}
+                      >
+                        <div className="flex justify-center">
+                          <FeatureValue
+                            included={plan.entitlementCodes.has(
+                              entitlement.code
+                            )}
+                          />
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -272,13 +340,20 @@ export function PricingComparisonTable({ config }: PricingComparisonTableProps) 
           transition={{ duration: 0.5, delay: 0.1 }}
           className="max-w-lg mx-auto md:hidden"
         >
-          <Tabs defaultValue="better" className="w-full">
-            {/* Plan Tabs */}
-            <TabsList className="w-full grid grid-cols-3 h-12 bg-muted/50 p-1 rounded-xl mb-6">
-              {config.plans.map((plan) => (
+          <Tabs
+            defaultValue={plans[1]?.id || plans[0]?.id}
+            className="w-full"
+          >
+            <TabsList
+              className="w-full grid h-12 bg-muted/50 p-1 rounded-xl mb-6"
+              style={{
+                gridTemplateColumns: `repeat(${plans.length}, minmax(0, 1fr))`,
+              }}
+            >
+              {plans.map((plan) => (
                 <TabsTrigger
-                  key={plan.tier}
-                  value={plan.tier}
+                  key={plan.id}
+                  value={plan.id}
                   className={cn(
                     "rounded-lg text-sm font-medium transition-all relative",
                     "data-[state=active]:bg-white dark:data-[state=active]:bg-background data-[state=active]:shadow-sm",
@@ -293,106 +368,102 @@ export function PricingComparisonTable({ config }: PricingComparisonTableProps) 
               ))}
             </TabsList>
 
-            {/* Plan Content */}
-            {config.plans.map((plan) => {
-              const planKey = tierToKey[plan.tier]
-              return (
-                <TabsContent key={plan.tier} value={plan.tier} className="mt-0">
-                  {/* Plan Header Card */}
-                  <Card
-                    className={cn(
-                      "mb-6",
-                      plan.popular && "border-amber-200 bg-amber-50/50 dark:bg-amber-900/10"
+            {plans.map((plan) => (
+              <TabsContent key={plan.id} value={plan.id} className="mt-0">
+                <Card
+                  className={cn(
+                    "mb-6",
+                    plan.popular &&
+                      "border-amber-200 bg-amber-50/50 dark:bg-amber-900/10"
+                  )}
+                >
+                  <CardHeader className="text-center pb-4">
+                    {plan.popular && (
+                      <span className="inline-block px-3 py-1 text-xs font-semibold bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-200 rounded-full mb-2 mx-auto w-fit">
+                        Most Popular
+                      </span>
                     )}
-                  >
-                    <CardHeader className="text-center pb-4">
-                      {plan.popular && (
-                        <span className="inline-block px-3 py-1 text-xs font-semibold bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-200 rounded-full mb-2 mx-auto w-fit">
-                          Most Popular
-                        </span>
-                      )}
-                      <CardTitle className="text-xl font-serif">{plan.name}</CardTitle>
-                      <div className="text-3xl font-serif font-bold mt-2">{plan.price}</div>
-                      <p className="text-xs text-muted-foreground/60">{plan.period}</p>
-                      <p className="text-sm text-foreground/80 mt-3">{plan.description}</p>
-                    </CardHeader>
-                    <CardContent>
-                      {plan.popular ? (
-                        <Link href={plan.ctaHref || urls.demo} className="block">
-                          <ShimmerButton
-                            background="rgba(217, 119, 6, 1)"
-                            shimmerColor="#FEF3C7"
-                            className="w-full h-12 text-base font-semibold"
-                          >
-                            {plan.ctaText}
-                            <ArrowRight className="ml-2 size-4" />
-                          </ShimmerButton>
-                        </Link>
-                      ) : (
-                        <Link href={plan.ctaHref || urls.demo} className="block">
-                          <Button
-                            variant="outline"
-                            className="w-full h-12 text-base font-semibold rounded-full"
-                          >
-                            {plan.ctaText}
-                            <ChevronRight className="ml-2 size-4" />
-                          </Button>
-                        </Link>
-                      )}
-                    </CardContent>
-                  </Card>
+                    <CardTitle className="text-xl font-serif">
+                      {plan.name}
+                    </CardTitle>
+                    <div className="text-3xl font-serif font-bold mt-2">
+                      {plan.price}
+                    </div>
+                    <p className="text-xs text-muted-foreground/60">
+                      {plan.period}
+                    </p>
+                    <p className="text-sm text-foreground/80 mt-3">
+                      {plan.description}
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    {plan.popular ? (
+                      <Link
+                        href={getPlanCtaHref(plan.id)}
+                        className="block"
+                      >
+                        <ShimmerButton
+                          background="rgba(217, 119, 6, 1)"
+                          shimmerColor="#FEF3C7"
+                          className="w-full h-12 text-base font-semibold"
+                        >
+                          Get Started
+                          <ArrowRight className="ml-2 size-4" />
+                        </ShimmerButton>
+                      </Link>
+                    ) : (
+                      <Link
+                        href={getPlanCtaHref(plan.id)}
+                        className="block"
+                      >
+                        <Button
+                          variant="outline"
+                          className="w-full h-12 text-base font-semibold rounded-full"
+                        >
+                          Get Started
+                          <ChevronRight className="ml-2 size-4" />
+                        </Button>
+                      </Link>
+                    )}
+                  </CardContent>
+                </Card>
 
-                  {/* Feature Categories as Accordions */}
-                  <TooltipProvider>
-                    <Accordion
-                      type="multiple"
-                      defaultValue={["core-features"]}
-                      className="space-y-3"
-                    >
-                      {config.featureCategories.map((category, catIndex) => {
-                        const categoryId = category.category.toLowerCase().replace(/\s+/g, "-")
-                        return (
-                          <AccordionItem
-                            key={catIndex}
-                            value={categoryId}
-                            className="border border-border/40 rounded-xl px-4 bg-background"
+                {/* Features as accordion */}
+                <Accordion
+                  type="multiple"
+                  defaultValue={["features"]}
+                  className="space-y-3"
+                >
+                  <AccordionItem
+                    value="features"
+                    className="border border-border/40 rounded-xl px-4 bg-background"
+                  >
+                    <AccordionTrigger className="text-sm font-semibold py-4 hover:no-underline">
+                      Features
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="pb-2">
+                        {allEntitlements.map((entitlement) => (
+                          <div
+                            key={entitlement.code}
+                            className="flex items-center justify-between py-3 border-b border-border/30 last:border-0"
                           >
-                            <AccordionTrigger className="text-sm font-semibold py-4 hover:no-underline">
-                              {category.category}
-                            </AccordionTrigger>
-                            <AccordionContent>
-                              <div className="pb-2">
-                                {category.items.map((item, itemIndex) => (
-                                  <div
-                                    key={itemIndex}
-                                    className="flex items-center justify-between py-3 border-b border-border/30 last:border-0"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-sm">{item.name}</span>
-                                      {item.tooltip && (
-                                        <Tooltip>
-                                          <TooltipTrigger>
-                                            <HelpCircle className="size-3.5 text-muted-foreground/60" />
-                                          </TooltipTrigger>
-                                          <TooltipContent>
-                                            <p className="max-w-[200px] text-sm">{item.tooltip}</p>
-                                          </TooltipContent>
-                                        </Tooltip>
-                                      )}
-                                    </div>
-                                    <FeatureValue value={item[planKey]} />
-                                  </div>
-                                ))}
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        )
-                      })}
-                    </Accordion>
-                  </TooltipProvider>
-                </TabsContent>
-              )
-            })}
+                            <span className="text-sm">
+                              {entitlement.name}
+                            </span>
+                            <FeatureValue
+                              included={plan.entitlementCodes.has(
+                                entitlement.code
+                              )}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </TabsContent>
+            ))}
           </Tabs>
 
           {/* Mobile Footer */}

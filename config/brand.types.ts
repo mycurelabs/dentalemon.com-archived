@@ -78,6 +78,8 @@ export interface ExternalURLs {
   privacyPath: string;
   /** Terms of service page path (relative) */
   termsPath: string;
+  /** Account/signup URL for dynamic pricing CTAs */
+  accountUrl?: string;
 }
 
 export interface SocialMediaLinks {
