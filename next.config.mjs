@@ -63,6 +63,19 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    // Only enable rewrites if API_URL is configured
+    const apiUrl = process.env.API_URL
+    if (!apiUrl) {
+      return []
+    }
+    return [
+      {
+        source: '/licenses/:path*',
+        destination: `${apiUrl}/licenses/:path*`,
+      },
+    ]
+  },
 }
 
 export default nextConfig
