@@ -58,6 +58,7 @@ export const brandConfig: BrandConfig = {
     contact: "https://dentalemon.com/contact",
     privacyPath: "/privacy-policy",
     termsPath: "/terms-and-conditions",
+    accountUrl: process.env.NEXT_PUBLIC_ACCOUNT_URL || "https://app.dentalemon.com",
   },
 
   // ============================================
