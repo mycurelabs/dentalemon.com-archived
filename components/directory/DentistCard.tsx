@@ -37,12 +37,14 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
     >
       <Card className={cn(
         "overflow-hidden h-full shadow-md",
-        !isGridView && "flex flex-row"
+        "flex flex-row",
+        isGridView && "md:block"
       )}>
         {/* Image Section */}
         <div className={cn(
           "relative bg-muted",
-          isGridView ? "w-full h-48" : "w-48 h-auto flex-shrink-0"
+          "w-28 h-auto flex-shrink-0",
+          isGridView ? "md:w-full md:h-48 md:flex-shrink" : "md:w-48"
         )}>
           {dentist.photo ? (
             <Image
@@ -61,8 +63,8 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
 
         {/* Content Section */}
         <div className={cn(
-          "flex flex-col",
-          !isGridView && "flex-1"
+          "flex flex-col flex-1",
+          isGridView && "md:flex-none"
         )}>
           <CardContent className={cn(
             "flex-1",
@@ -139,12 +141,13 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
           {/* CTA Buttons */}
           <CardFooter className={cn(
             "gap-2 p-4 pt-0",
-            isGridView ? "flex-col" : "flex-row"
+            "flex-row",
+            isGridView && "md:flex-col"
           )}>
             <Button
               asChild
               variant="outline"
-              className={cn("rounded-lg", isGridView && "w-full")}
+              className={cn("rounded-lg text-xs md:text-sm", isGridView && "md:w-full")}
             >
               <Link href={`/find-a-dentist/${dentist.slug}`}>
                 View Profile
@@ -152,9 +155,13 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
             </Button>
             <Button
               onClick={() => onBookClick?.(dentist.id)}
+              disabled={!hasAvailability}
               className={cn(
-                "rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90",
-                isGridView && "w-full"
+                "rounded-lg text-xs md:text-sm",
+                hasAvailability
+                  ? "bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90"
+                  : "bg-muted text-muted-foreground cursor-not-allowed",
+                isGridView && "md:w-full"
               )}
             >
               Book Appointment

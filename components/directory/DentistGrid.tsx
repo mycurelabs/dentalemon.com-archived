@@ -51,10 +51,8 @@ export function DentistGrid({ dentists, viewMode, onBookClick }: DentistGridProp
       initial="hidden"
       animate="visible"
       className={cn(
-        "grid gap-6",
-        viewMode === "grid"
-          ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          : "grid-cols-1"
+        "grid gap-6 grid-cols-1",
+        viewMode === "grid" && "md:grid-cols-2 lg:grid-cols-3"
       )}
     >
       {dentists.map((dentist) => (
