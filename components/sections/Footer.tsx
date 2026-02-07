@@ -55,6 +55,11 @@ export function Footer() {
               <h3 className="font-semibold">Support</h3>
               <ul className="-ml-2 text-sm">
                 <li>
+                  <Link href="/find-a-dentist" className="flex items-center min-h-[44px] px-2 text-muted-foreground hover:text-foreground transition-colors">
+                    Find a Dentist
+                  </Link>
+                </li>
+                <li>
                   <Link href={urls.portal} target="_blank" rel="noopener noreferrer" className="flex items-center min-h-[44px] px-2 text-muted-foreground hover:text-foreground transition-colors">
                     Customer Portal
                   </Link>
@@ -133,6 +138,11 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold">Support</h3>
             <ul className="-ml-2 text-sm">
+              <li>
+                <Link href="/find-a-dentist" className="flex items-center min-h-[44px] px-2 text-muted-foreground hover:text-foreground transition-colors">
+                  Find a Dentist
+                </Link>
+              </li>
               <li>
                 <Link href={urls.portal} target="_blank" rel="noopener noreferrer" className="flex items-center min-h-[44px] px-2 text-muted-foreground hover:text-foreground transition-colors">
                   Customer Portal

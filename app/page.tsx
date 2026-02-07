@@ -69,6 +69,7 @@ export default function LandingPage() {
           <nav className="hidden md:flex items-center gap-1">
             <Link href="#how-it-works" onClick={(e) => scrollToSection(e, '#how-it-works')} className="inline-flex h-9 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">How It Works</Link>
             <Link href="#pricing" onClick={(e) => scrollToSection(e, '#pricing')} className="inline-flex h-9 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">Pricing</Link>
+            <Link href="/find-a-dentist" className="inline-flex h-9 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">Find a Dentist</Link>
             <Link href="#faq" onClick={(e) => scrollToSection(e, '#faq')} className="inline-flex h-9 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">FAQs</Link>
             <Link href="mailto:info@dentalemon.com" className="inline-flex h-9 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">Contact</Link>
           </nav>

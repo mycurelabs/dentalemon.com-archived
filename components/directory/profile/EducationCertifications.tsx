@@ -2,7 +2,6 @@
 
 import { Education, Certification } from "@/types/dentist";
 import { motion } from "framer-motion";
-import { GraduationCap, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EducationCertificationsProps {
@@ -28,21 +27,19 @@ export function EducationCertifications({
       transition={{ duration: 0.4, delay: 0.3 }}
       className="bg-card rounded-lg border shadow-sm p-6"
     >
-      <h2 className="text-xl font-semibold mb-6">Education & Certifications</h2>
+      <h2 className="font-sans text-xl font-semibold mb-6 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+        Education & Certifications
+      </h2>
 
       <div className="space-y-8">
         {/* Education Section */}
         {hasEducation && (
           <div>
-            <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-[#FFCC5E]" />
+            <h3 className="font-sans text-lg font-medium mb-4">
               Education
             </h3>
 
-            <div className="relative pl-8 space-y-6">
-              {/* Vertical timeline line */}
-              <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-border" />
-
+            <div className="relative ml-[7px] pl-6 space-y-6 border-l-2 border-neutral-100 dark:border-neutral-800">
               {education.map((edu, index) => (
                 <motion.div
                   key={`${edu.institution}-${edu.year}-${index}`}
@@ -52,8 +49,8 @@ export function EducationCertifications({
                   viewport={{ once: true }}
                   className="relative"
                 >
-                  {/* Timeline dot */}
-                  <div className="absolute -left-[1.6rem] top-1.5 h-3 w-3 rounded-full bg-[#FFCC5E] border-2 border-background" />
+                  {/* Timeline dot — centered on the border-l line */}
+                  <div className="absolute -left-[calc(1.5rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full bg-[#FFCC5E]" />
 
                   <div>
                     <p className="font-semibold text-sm mb-1">{edu.degree}</p>
@@ -79,15 +76,11 @@ export function EducationCertifications({
         {/* Certifications Section */}
         {hasCertifications && (
           <div>
-            <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-              <Award className="h-5 w-5 text-[#FFCC5E]" />
+            <h3 className="font-sans text-lg font-medium mb-4">
               Certifications
             </h3>
 
-            <div className="relative pl-8 space-y-6">
-              {/* Vertical timeline line */}
-              <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-border" />
-
+            <div className="relative ml-[7px] pl-6 space-y-6 border-l-2 border-neutral-100 dark:border-neutral-800">
               {certifications.map((cert, index) => {
                 const isExpired = cert.expiryDate
                   ? new Date(cert.expiryDate) < new Date()
@@ -102,10 +95,10 @@ export function EducationCertifications({
                     viewport={{ once: true }}
                     className="relative"
                   >
-                    {/* Timeline dot */}
+                    {/* Timeline dot — centered on the border-l line */}
                     <div
                       className={cn(
-                        "absolute -left-[1.6rem] top-1.5 h-3 w-3 rounded-full border-2 border-background",
+                        "absolute -left-[calc(1.5rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full",
                         isExpired ? "bg-muted" : "bg-[#FFCC5E]"
                       )}
                     />

@@ -113,9 +113,8 @@ describe('DentistCard', () => {
     it('renders availability date when available', () => {
       render(<DentistCard dentist={mockDentist} viewMode="grid" />)
 
-      // Check for availability indicator
-      const availabilityBadge = screen.getByText(/Available 2\/15\/2026/i)
-      expect(availabilityBadge).toBeInTheDocument()
+      // Check for availability indicator (now shows "Next available: Feb 15")
+      expect(screen.getByText(/Next available:/i)).toBeInTheDocument()
     })
   })
 

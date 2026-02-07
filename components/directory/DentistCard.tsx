@@ -4,7 +4,8 @@ import { Dentist } from "@/types/dentist";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,7 +36,7 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
       transition={{ duration: 0.2 }}
     >
       <Card className={cn(
-        "overflow-hidden h-full",
+        "overflow-hidden h-full shadow-md",
         !isGridView && "flex flex-row"
       )}>
         {/* Image Section */}
@@ -87,9 +88,22 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
                   </Badge>
                 ))}
                 {remainingServicesCount > 0 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{remainingServicesCount} more
-                  </Badge>
+                  <TooltipProvider delayDuration={200}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Badge variant="outline" className="text-xs cursor-default">
+                          +{remainingServicesCount} more
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-[200px]">
+                        <div className="flex flex-wrap gap-1">
+                          {dentist.services.slice(4).map((service) => (
+                            <span key={service} className="text-xs">{service}</span>
+                          ))}
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
               </div>
             </div>
@@ -103,20 +117,15 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
             {/* Availability Indicator */}
             <div className="flex items-center gap-2">
               {hasAvailability ? (
-                <>
-                  <div className="h-2 w-2 rounded-full bg-green-500" />
-                  <Badge variant="outline" className="text-xs">
-                    <Clock className="h-3 w-3 mr-1" />
-                    Available {new Date(dentist.availability.date).toLocaleDateString()}
-                  </Badge>
-                </>
+                <span className="inline-flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                  Next available: {new Date(dentist.availability.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                </span>
               ) : (
-                <>
-                  <div className="h-2 w-2 rounded-full bg-gray-400" />
-                  <Badge variant="outline" className="text-xs">
-                    Contact for availability
-                  </Badge>
-                </>
+                <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gray-400" />
+                  Contact for availability
+                </span>
               )}
             </div>
           </CardContent>
@@ -129,7 +138,7 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
             <Button
               asChild
               variant="outline"
-              className={cn(isGridView && "w-full")}
+              className={cn("rounded-lg", isGridView && "w-full")}
             >
               <Link href={`/find-a-dentist/${dentist.slug}`}>
                 View Profile
@@ -138,7 +147,7 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
             <Button
               onClick={() => onBookClick?.(dentist.id)}
               className={cn(
-                "bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90",
+                "rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90",
                 isGridView && "w-full"
               )}
             >

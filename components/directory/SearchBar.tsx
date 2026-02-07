@@ -36,7 +36,7 @@ export function SearchBar({
     <div className={cn("relative w-full", className)}>
       <div className="relative">
         {/* Search icon */}
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
 
         {/* Input field */}
         <Input
@@ -45,8 +45,8 @@ export function SearchBar({
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           className={cn(
-            "pl-10 pr-10",
-            "focus-visible:ring-[#FFCC5E] focus-visible:border-[#FFCC5E]"
+            "h-12 pl-12 pr-10 rounded-lg text-base",
+            "focus-visible:ring-ring focus-visible:border-ring"
           )}
         />
 

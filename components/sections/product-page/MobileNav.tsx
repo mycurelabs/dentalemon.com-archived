@@ -54,6 +54,13 @@ export function MobileNav({ isOpen, onOpenChange }: MobileNavProps) {
               How it Works
             </Link>
             <Link
+              href="/find-a-dentist"
+              onClick={handleLinkClick}
+              className="flex items-center min-h-[44px] px-2 text-base font-medium hover:text-primary transition-colors"
+            >
+              Find a Dentist
+            </Link>
+            <Link
               href="/#faq"
               onClick={handleLinkClick}
               className="flex items-center min-h-[44px] px-2 text-base font-medium hover:text-primary transition-colors"
