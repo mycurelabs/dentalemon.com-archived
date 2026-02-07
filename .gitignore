@@ -39,3 +39,7 @@ next-env.d.ts
 # Claude Code local settings
 .claude/settings.local.json
 .playwright-mcp/
+
+# Visual References
+.references
+.MYCURE_Design_System_Adaptation_Guide.md 
