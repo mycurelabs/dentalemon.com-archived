@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { sampleDentists } from "@/data/dentists/sample-dentists";
 import { DentistProfileClient } from "./DentistProfileClient";
-import { ChevronRight } from "lucide-react";
 import { generateDentistSchema, generateDentistBreadcrumbSchema } from "@/lib/seo/generateDentistSchema";
 
 interface PageProps {
@@ -65,24 +65,22 @@ export default async function DentistProfilePage({ params }: PageProps) {
       />
 
       {/* Breadcrumb Navigation */}
-      <div className="bg-muted/50 border-b">
-        <div className="container px-4 md:px-6 py-4">
-          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-[#FFCC5E] transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <Link href="/find-a-dentist" className="hover:text-[#FFCC5E] transition-colors">
-              Find a Dentist
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-foreground font-medium">{dentist.name}</span>
-          </nav>
-        </div>
-      </div>
+      <nav className="sticky top-0 z-40 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800" aria-label="Breadcrumb">
+        <ol className="container px-4 md:px-6 flex items-center gap-1.5 text-sm text-muted-foreground py-3">
+          <li>
+            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+          </li>
+          <li><ChevronRight className="h-3.5 w-3.5" /></li>
+          <li>
+            <Link href="/find-a-dentist" className="hover:text-foreground transition-colors">Find a Dentist</Link>
+          </li>
+          <li><ChevronRight className="h-3.5 w-3.5" /></li>
+          <li className="text-foreground font-medium truncate max-w-[200px]">{dentist.name}</li>
+        </ol>
+      </nav>
 
       {/* Main Content */}
-      <section className="py-20 md:py-32">
+      <section className="py-8 md:py-16">
         <div className="container px-4 md:px-6">
           <DentistProfileClient dentist={dentist} />
         </div>

@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { UseFormReturn } from "react-hook-form"
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import {
   FormControl,
   FormField,
@@ -16,8 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
+import { cn } from "@/lib/utils"
 import { BookingFormData } from "../BookingWizard"
 
 interface AppointmentDetailsStepProps {
@@ -42,7 +47,7 @@ export function AppointmentDetailsStep({ form }: AppointmentDetailsStepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-2">Appointment Details</h3>
+        <h3 className="text-lg font-sans font-semibold mb-2">Appointment Details</h3>
         <p className="text-sm text-muted-foreground">
           Please provide your preferred appointment details.
         </p>
@@ -77,16 +82,40 @@ export function AppointmentDetailsStep({ form }: AppointmentDetailsStepProps) {
         control={form.control}
         name="preferredDate"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="flex flex-col">
             <FormLabel>Preferred Date *</FormLabel>
-            <FormControl>
-              <Input
-                type="date"
-                placeholder="Select date"
-                {...field}
-                min={new Date().toISOString().split("T")[0]}
-              />
-            </FormControl>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-[240px] pl-3 text-left font-normal",
+                      !field.value && "text-muted-foreground"
+                    )}
+                  >
+                    {field.value ? (
+                      format(new Date(field.value), "PPP")
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={field.value ? new Date(field.value) : undefined}
+                  onSelect={(date) => {
+                    if (date) {
+                      field.onChange(format(date, "yyyy-MM-dd"))
+                    }
+                  }}
+                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                />
+              </PopoverContent>
+            </Popover>
             <FormMessage />
           </FormItem>
         )}

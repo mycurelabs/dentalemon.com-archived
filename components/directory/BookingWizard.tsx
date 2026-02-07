@@ -89,7 +89,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
       email: "",
       consent: false,
     },
-    mode: "onChange",
+    mode: "onTouched",
   })
 
   const validateCurrentStep = async () => {
@@ -114,7 +114,14 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
   const handleNext = async () => {
     const isValid = await validateCurrentStep()
     if (isValid && currentStep < 3) {
-      setCurrentStep((prev) => prev + 1)
+      const nextStep = currentStep + 1
+      // Clear errors for the next step's fields so they don't show on arrival
+      if (nextStep === 2) {
+        form.clearErrors(["consultationType", "preferredDate", "preferredTime"])
+      } else if (nextStep === 3) {
+        form.clearErrors(["firstName", "lastName", "phone", "email", "consent"])
+      }
+      setCurrentStep(nextStep)
     }
   }
 
@@ -196,7 +203,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Book Appointment with {dentist.name}</DialogTitle>
+          <DialogTitle className="font-sans">Book Appointment with {dentist.name}</DialogTitle>
           <DialogDescription>
             {dentist.clinics[0]?.name || "Clinic"}
           </DialogDescription>
@@ -210,7 +217,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-2">Request Submitted!</h3>
+              <h3 className="text-lg font-sans font-semibold mb-2">Request Submitted!</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 {submitStatus.message}
               </p>
@@ -220,14 +227,14 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
                 </p>
               )}
             </div>
-            <div className="text-xs text-muted-foreground border-t pt-4">
-              <p className="font-semibold mb-2">Important:</p>
-              <p>
+            <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1">Important:</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
                 This is an appointment request, not a confirmed booking. The clinic will
                 contact you within 24-48 hours to confirm your appointment.
               </p>
             </div>
-            <Button onClick={handleClose} className="mt-4">
+            <Button onClick={handleClose} className="mt-4 rounded-lg">
               Close
             </Button>
           </div>
@@ -238,10 +245,10 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
               <p className="text-sm">{submitStatus.message}</p>
             </div>
             <div className="flex gap-2 justify-center">
-              <Button onClick={handleRetry} variant="outline">
+              <Button onClick={handleRetry} variant="outline" className="rounded-lg">
                 Try Again
               </Button>
-              <Button onClick={handleClose}>Close</Button>
+              <Button onClick={handleClose} className="rounded-lg">Close</Button>
             </div>
           </div>
         ) : (
@@ -285,9 +292,9 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
                 {currentStep === 3 && <ContactInfoStep form={form} />}
 
                 {/* Legal Disclaimer */}
-                <div className="bg-muted/50 rounded-lg p-4 text-xs text-muted-foreground">
-                  <p className="font-semibold mb-1">Legal Disclaimer:</p>
-                  <p>
+                <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900">
+                  <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1">Legal Disclaimer:</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     By submitting this form, you acknowledge that this is an appointment
                     request and not a confirmed booking. The clinic will contact you to
                     confirm availability. All information provided will be handled in
@@ -301,6 +308,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
                   <Button
                     type="button"
                     variant="outline"
+                    className="rounded-lg"
                     onClick={currentStep === 1 ? handleClose : handleBack}
                   >
                     {currentStep === 1 ? "Cancel" : "Back"}
@@ -310,8 +318,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
                     <Button
                       type="button"
                       onClick={handleNext}
-                      style={{ backgroundColor: "#FFCC5E", color: "#000" }}
-                      className="hover:opacity-90"
+                      className="rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90"
                     >
                       Next
                     </Button>
@@ -319,8 +326,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      style={{ backgroundColor: "#FFCC5E", color: "#000" }}
-                      className="hover:opacity-90"
+                      className="rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90"
                     >
                       {isSubmitting ? (
                         <>

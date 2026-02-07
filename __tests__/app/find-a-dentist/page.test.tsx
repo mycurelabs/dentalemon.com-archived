@@ -142,8 +142,8 @@ describe('Find a Dentist Directory Page', () => {
     it('renders the directory page with header', () => {
       render(<DirectoryContent initialDentists={mockDentists} />)
 
-      expect(screen.getByText('Find Your Perfect Dentist')).toBeInTheDocument()
-      expect(screen.getByText(/Search and book appointments with qualified dentists/i)).toBeInTheDocument()
+      expect(screen.getByText(/Find the Right Dentist/i)).toBeInTheDocument()
+      expect(screen.getByText(/Search verified dentists in Metro Manila/i)).toBeInTheDocument()
     })
 
     it('renders search bar', () => {

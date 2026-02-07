@@ -62,7 +62,7 @@ describe("AppointmentDetailsStep", () => {
     expect(screen.getByRole("option", { name: "Procedure" })).toBeInTheDocument()
   })
 
-  it("allows selecting a date", async () => {
+  it("allows selecting a date via calendar popover", async () => {
     const user = userEvent.setup()
 
     function TestComponent() {
@@ -90,13 +90,20 @@ describe("AppointmentDetailsStep", () => {
 
     render(<TestComponent />)
 
-    const dateInput = screen.getByLabelText(/preferred date/i) as HTMLInputElement
-    expect(dateInput).toBeInTheDocument()
+    // Click the date picker button to open the calendar popover
+    const dateButton = screen.getByRole("button", { name: /preferred date/i })
+    expect(dateButton).toBeInTheDocument()
+    await user.click(dateButton)
 
-    await user.type(dateInput, "2026-03-15")
+    // Select a future day (28 is available in all months)
+    await waitFor(() => {
+      expect(screen.getByText("28")).toBeInTheDocument()
+    })
+    await user.click(screen.getByText("28"))
 
+    // Verify form value was set (should contain "28" as the day)
     const form = (window as any).testForm
-    expect(form.getValues("preferredDate")).toBe("2026-03-15")
+    expect(form.getValues("preferredDate")).toContain("28")
   })
 
   it("allows entering a reason for visit", async () => {
@@ -175,12 +182,10 @@ describe("AppointmentDetailsStep", () => {
     })
   })
 
-  it("date input has minimum date set to today", () => {
+  it("renders date picker button with placeholder", () => {
     render(<TestWrapper />)
 
-    const dateInput = screen.getByLabelText(/preferred date/i) as HTMLInputElement
-    const today = new Date().toISOString().split("T")[0]
-
-    expect(dateInput.getAttribute("min")).toBe(today)
+    const dateButton = screen.getByRole("button", { name: /preferred date/i })
+    expect(dateButton).toBeInTheDocument()
   })
 })

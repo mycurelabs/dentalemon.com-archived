@@ -8,7 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpCircle } from "lucide-react";
 
 interface FAQProps {
   faqs: FAQType[];
@@ -22,8 +21,7 @@ export function FAQ({ faqs }: FAQProps) {
   return (
     <Card className="shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-[#FFCC5E]" />
+        <CardTitle className="font-sans text-xl">
           Frequently Asked Questions
         </CardTitle>
       </CardHeader>
@@ -31,10 +29,10 @@ export function FAQ({ faqs }: FAQProps) {
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-left text-sm font-medium hover:text-[#FFCC5E] transition-colors">
+              <AccordionTrigger className="text-left text-base font-sans font-medium transition-colors py-5">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+              <AccordionContent className="text-base text-muted-foreground leading-relaxed">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

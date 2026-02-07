@@ -3,7 +3,7 @@
 import { Availability } from "@/types/dentist";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin, DollarSign } from "lucide-react";
+import { Calendar, Clock, MapPin, Banknote } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EarliestAvailabilityProps {
@@ -29,16 +29,16 @@ export function EarliestAvailability({
   const formattedTime = availability.time;
 
   return (
-    <Card className="border-2 border-[#FFCC5E]/20 bg-card shadow-sm">
+    <Card className="border bg-card shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg">Earliest Availability</CardTitle>
+        <CardTitle className="font-sans text-lg">Earliest Availability</CardTitle>
         <CardDescription>Book this slot to secure your appointment</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
         {/* Date */}
         <div className="flex items-start gap-3">
-          <Calendar className="h-5 w-5 text-[#FFCC5E] flex-shrink-0 mt-0.5" />
+          <Calendar className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-muted-foreground">Date</p>
             <p className="font-semibold">{formattedDate}</p>
@@ -47,7 +47,7 @@ export function EarliestAvailability({
 
         {/* Time */}
         <div className="flex items-start gap-3">
-          <Clock className="h-5 w-5 text-[#FFCC5E] flex-shrink-0 mt-0.5" />
+          <Clock className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-muted-foreground">Time</p>
             <p className="font-semibold">{formattedTime}</p>
@@ -56,7 +56,7 @@ export function EarliestAvailability({
 
         {/* Clinic */}
         <div className="flex items-start gap-3">
-          <MapPin className="h-5 w-5 text-[#FFCC5E] flex-shrink-0 mt-0.5" />
+          <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-muted-foreground">Clinic</p>
             <p className="font-semibold text-sm">{availability.clinicName}</p>
@@ -66,7 +66,7 @@ export function EarliestAvailability({
         {/* Consultation Fee */}
         {consultationFee && (
           <div className="flex items-start gap-3">
-            <DollarSign className="h-5 w-5 text-[#FFCC5E] flex-shrink-0 mt-0.5" />
+            <Banknote className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-muted-foreground">Consultation Fee</p>
               <p className="font-semibold">PHP {consultationFee.toLocaleString()}</p>
@@ -79,7 +79,7 @@ export function EarliestAvailability({
         <Button
           onClick={onBookClick}
           className={cn(
-            "w-full bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90",
+            "w-full rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90",
             "font-semibold"
           )}
         >

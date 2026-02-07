@@ -2,7 +2,6 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2 } from "lucide-react";
 
 interface AffiliationsProps {
   affiliations: string[];
@@ -16,8 +15,7 @@ export function Affiliations({ affiliations }: AffiliationsProps) {
   return (
     <Card className="shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Building2 className="h-5 w-5 text-[#FFCC5E]" />
+        <CardTitle className="font-sans text-lg">
           Professional Affiliations
         </CardTitle>
       </CardHeader>

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { motion } from "framer-motion";
 import { Dentist, DirectoryFilters } from "@/types/dentist";
 import {
   SearchBar,
@@ -10,9 +11,8 @@ import {
   LegalDisclaimer,
   BookingWizard,
 } from "@/components/directory";
-import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Grid3x3, List } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface DirectoryContentProps {
   initialDentists: Dentist[];
@@ -146,22 +146,33 @@ export function DirectoryContent({ initialDentists }: DirectoryContentProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Section */}
-      <section className="py-20 md:py-32 border-b">
-        <div className="container px-4 md:px-6">
-          <div className="max-w-3xl mx-auto text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Find Your Perfect Dentist
+      {/* Hero Section */}
+      <section className="w-full py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden text-white relative brand-gradient-bg">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+        <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="container px-4 sm:px-6 md:px-8 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight leading-tight mb-6 text-white">
+              Find the Right Dentist.<br />Book in Minutes.
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Search and book appointments with qualified dentists in Metro Manila
+            <p className="text-lg sm:text-xl text-white/80 leading-relaxed mb-8 max-w-2xl mx-auto">
+              Search verified dentists in Metro Manila by specialty, clinic, or location—and book appointments instantly, no calls required.
             </p>
-          </div>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
-            <SearchBar onSearch={setSearchQuery} />
-          </div>
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto">
+              <SearchBar
+                onSearch={setSearchQuery}
+                className="[&_input]:bg-white [&_input]:shadow-md [&_input]:border-neutral-200 [&_input]:text-foreground [&_input]:placeholder:text-neutral-400 [&_svg]:text-neutral-500"
+              />
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -200,25 +211,23 @@ export function DirectoryContent({ initialDentists }: DirectoryContentProps) {
                   )}
                 </div>
 
-                {/* View Toggle */}
-                <div className="flex gap-2">
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("grid")}
-                    aria-label="Grid view"
-                  >
+                {/* View Toggle — hidden on mobile where grid is always single-column */}
+                <ToggleGroup
+                  type="single"
+                  variant="outline"
+                  value={viewMode}
+                  onValueChange={(value) => {
+                    if (value) setViewMode(value as "grid" | "list");
+                  }}
+                  className="hidden md:flex"
+                >
+                  <ToggleGroupItem value="grid" aria-label="Grid view">
                     <Grid3x3 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("list")}
-                    aria-label="List view"
-                  >
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="list" aria-label="List view">
                     <List className="h-4 w-4" />
-                  </Button>
-                </div>
+                  </ToggleGroupItem>
+                </ToggleGroup>
               </div>
 
               {/* Dentist Grid */}

@@ -23,7 +23,7 @@ export function PatientTypeStep({ form }: PatientTypeStepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold mb-2">Select Patient Type</h3>
+        <h3 className="text-lg font-sans font-semibold mb-2">Select Patient Type</h3>
         <p className="text-sm text-muted-foreground">
           Are you a new patient or have you visited this dentist before?
         </p>

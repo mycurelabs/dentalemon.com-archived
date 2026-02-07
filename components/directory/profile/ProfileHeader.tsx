@@ -1,11 +1,10 @@
 "use client";
 
 import { Dentist } from "@/types/dentist";
-import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { CheckCircle2, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { BadgeCheck } from "lucide-react";
 
 interface ProfileHeaderProps {
   dentist: Dentist;
@@ -24,79 +23,72 @@ export function ProfileHeader({ dentist }: ProfileHeaderProps) {
     >
       <div className="flex flex-col md:flex-row gap-6">
         {/* Photo */}
-        <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden flex-shrink-0 mx-auto md:mx-0">
+        <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden flex-shrink-0 mx-auto md:mx-0 ring-2 ring-neutral-100 dark:ring-neutral-800">
           <Image
             src={dentist.photo || "/placeholder-dentist.jpg"}
             alt={`${dentist.name} - ${dentist.specialty}`}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 128px, 160px"
+            sizes="(max-width: 768px) 112px, 144px"
             priority
           />
         </div>
 
         {/* Info */}
         <div className="flex-1 text-center md:text-left">
-          {/* Name & Credentials */}
-          <div className="mb-3">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+          {/* Name + Verified */}
+          <div className="flex items-center gap-2 justify-center md:justify-start mb-1">
+            <h1 className="text-2xl md:text-3xl font-bold">
               {dentist.name}
               {dentist.title && (
-                <span className="text-muted-foreground ml-2">{dentist.title}</span>
+                <span className="font-normal text-muted-foreground">, {dentist.title}</span>
               )}
             </h1>
-
-            {/* Verified Badge */}
             {dentist.verified && (
-              <div className="inline-flex items-center gap-1.5 text-sm text-green-600 mb-2">
-                <CheckCircle2 className="h-4 w-4" />
-                <span>Verified Profile</span>
-              </div>
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <BadgeCheck className="h-6 w-6 text-blue-500 flex-shrink-0" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">Verified by Dentalemon</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           </div>
 
-          {/* Specialty & Experience */}
-          <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
-            <Badge className="bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90">
-              {dentist.specialty}
-            </Badge>
-            <Badge variant="secondary">
-              {dentist.yearsOfExperience} {dentist.yearsOfExperience === 1 ? 'Year' : 'Years'} of Experience
-            </Badge>
-          </div>
+          {/* Specialty & Experience — plain text subtitle */}
+          <p className="text-base text-muted-foreground mb-4 justify-center md:justify-start">
+            {dentist.specialty}
+            <span className="mx-2 text-neutral-300 dark:text-neutral-600">·</span>
+            {dentist.yearsOfExperience} {dentist.yearsOfExperience === 1 ? 'year' : 'years'} of experience
+          </p>
 
-          {/* Languages */}
-          <div className="mb-4">
-            <p className="text-sm text-muted-foreground mb-1.5">Languages Spoken:</p>
-            <div className="flex flex-wrap gap-1.5 justify-center md:justify-start">
-              {dentist.languages.map((language) => (
-                <Badge key={language} variant="outline" className="text-xs">
-                  {language}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {/* Accepting New Patients & Availability Status */}
-          <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+          {/* Status indicators — subtle inline text */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 justify-center md:justify-start mb-4">
             {isAcceptingNewPatients && (
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                <CheckCircle2 className="h-3 w-3 mr-1" />
-                Accepting New Patients
-              </Badge>
+              <span className="inline-flex items-center gap-1.5 text-sm text-green-700 dark:text-green-400">
+                <span className="h-2 w-2 rounded-full bg-green-500 flex-shrink-0" />
+                Accepting new patients
+              </span>
             )}
-
             {hasAvailability && (
-              <Badge variant="outline" className="text-xs">
-                <Clock className="h-3 w-3 mr-1" />
+              <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                 Next available: {new Date(dentist.availability.date).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric'
                 })}
-              </Badge>
+              </span>
             )}
           </div>
+
+          {/* Languages — simple comma-separated text */}
+          <p className="text-sm text-muted-foreground">
+            <span className="text-foreground font-medium">Languages:</span>{" "}
+            {dentist.languages.join(", ")}
+          </p>
         </div>
       </div>
     </motion.div>

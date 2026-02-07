@@ -19,8 +19,8 @@ describe('DentistProfileClient (Profile Page)', () => {
     // Check for dentist name in header
     expect(screen.getByText('Dr. Jane Smith')).toBeInTheDocument()
 
-    // Check for specialty
-    expect(screen.getByText('General Dentistry')).toBeInTheDocument()
+    // Check for specialty (may appear in multiple places)
+    expect(screen.getAllByText(/General Dentistry/).length).toBeGreaterThan(0)
 
     // Check for bio section
     expect(screen.getByText(/Dr. Jane Smith is a dedicated general dentist/i)).toBeInTheDocument()
@@ -31,15 +31,15 @@ describe('DentistProfileClient (Profile Page)', () => {
 
     // Check for header elements
     expect(screen.getByText('Dr. Jane Smith')).toBeInTheDocument()
-    expect(screen.getByText('DMD')).toBeInTheDocument()
-    expect(screen.getByText('15 Years of Experience')).toBeInTheDocument()
+    expect(screen.getAllByText(/DMD/).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/15 years of experience/i).length).toBeGreaterThan(0)
   })
 
   it('renders clinic schedules section', () => {
     render(<DentistProfileClient dentist={mockDentist} />)
 
-    // Check for clinic schedules section
-    expect(screen.getByText('Clinic Locations & Schedules')).toBeInTheDocument()
+    // Check for clinic schedules section (singular for 1 clinic)
+    expect(screen.getByText('Clinic Location & Schedule')).toBeInTheDocument()
     // Clinic name may appear in both ClinicSchedules and EarliestAvailability
     const clinicNames = screen.getAllByText('SmileCare Dental Clinic - Makati')
     expect(clinicNames.length).toBeGreaterThan(0)
@@ -125,7 +125,7 @@ describe('Profile Page Integration', () => {
     // Verify all main sections are present
     const sections = [
       'Dr. Jane Smith', // Header
-      'Clinic Locations & Schedules', // Clinics
+      'Clinic Location & Schedule', // Clinics (singular for 1 clinic)
       'Education & Certifications', // Education
       'Earliest Availability', // Sidebar
       'Professional Affiliations', // Sidebar

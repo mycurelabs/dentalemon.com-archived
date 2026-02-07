@@ -12,51 +12,50 @@ describe('ProfileHeader', () => {
     // Check for name
     expect(screen.getByText('Dr. Jane Smith')).toBeInTheDocument()
 
-    // Check for title/credentials
-    expect(screen.getByText('DMD')).toBeInTheDocument()
+    // Check for title/credentials (now rendered as ", DMD" suffix)
+    expect(screen.getByText(', DMD')).toBeInTheDocument()
   })
 
-  it('renders specialty badge', () => {
+  it('renders specialty', () => {
     render(<ProfileHeader dentist={mockDentist} />)
 
-    // Check for specialty
-    expect(screen.getByText('General Dentistry')).toBeInTheDocument()
+    // Check for specialty (now rendered as plain text in subtitle)
+    expect(screen.getByText(/General Dentistry/)).toBeInTheDocument()
   })
 
   it('renders years of experience', () => {
     render(<ProfileHeader dentist={mockDentist} />)
 
-    // Check for years of experience (15 Years of Experience)
-    expect(screen.getByText(/15 Years of Experience/i)).toBeInTheDocument()
+    // Check for years of experience (now lowercase: "15 years of experience")
+    expect(screen.getByText(/15 years of experience/i)).toBeInTheDocument()
   })
 
-  it('renders accepting new patients badge', () => {
+  it('renders accepting new patients indicator', () => {
     render(<ProfileHeader dentist={mockDentist} />)
 
-    // Check for accepting new patients badge
-    expect(screen.getByText('Accepting New Patients')).toBeInTheDocument()
+    // Check for accepting new patients (now lowercase inline text)
+    expect(screen.getByText(/Accepting new patients/)).toBeInTheDocument()
   })
 
-  it('renders verified badge when dentist is verified', () => {
+  it('renders verified icon when dentist is verified', () => {
     render(<ProfileHeader dentist={mockDentist} />)
 
-    // Check for verified badge
-    expect(screen.getByText('Verified Profile')).toBeInTheDocument()
+    // Verified badge is now a tooltip icon — check for the SVG element
+    const verifiedIcon = document.querySelector('.lucide-badge-check')
+    expect(verifiedIcon).toBeInTheDocument()
   })
 
   it('renders languages spoken', () => {
     render(<ProfileHeader dentist={mockDentist} />)
 
-    // Check for languages
-    expect(screen.getByText('English')).toBeInTheDocument()
-    expect(screen.getByText('Tagalog')).toBeInTheDocument()
-    expect(screen.getByText('Cebuano')).toBeInTheDocument()
+    // Languages are now comma-separated text
+    expect(screen.getByText(/English, Tagalog, Cebuano/)).toBeInTheDocument()
   })
 
   it('renders availability date when available', () => {
     render(<ProfileHeader dentist={mockDentist} />)
 
-    // Check for availability text (should show "Next available: Feb 10, 2026")
+    // Check for availability text
     expect(screen.getByText(/Next available:/i)).toBeInTheDocument()
   })
 })

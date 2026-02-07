@@ -49,8 +49,8 @@ export function ProfileBio({ bio }: ProfileBioProps) {
             size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "text-[#FFCC5E] hover:text-[#FFCC5E]/80 hover:bg-[#FFCC5E]/10",
-              "gap-1 px-0"
+              "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300",
+              "gap-1 rounded-lg px-3"
             )}
           >
             {isExpanded ? (
