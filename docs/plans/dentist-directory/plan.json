@@ -1,0 +1,1388 @@
+{
+  "session": "dentist-directory",
+  "tier": "prd",
+  "priority": "P0",
+  "status": "draft",
+  "created": "2026-02-07",
+  "domain": "frontend",
+  "name": "dentist-directory",
+  "title": "Dentalemon Dentist Appointment Directory",
+  "tasks": [
+    {
+      "id": "T1",
+      "phase": "Phase 1: Foundation",
+      "title": "Project Setup",
+      "description": "Create directory structure, verify dependencies, define TypeScript interfaces",
+      "complexity": "S",
+      "estimate": "1 day",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "Directories created: app/find-a-dentist/, components/directory/, types/, data/dentists/",
+        "All shadcn/ui components verified installed (Card, Button, Input, Select, Sheet, Accordion, Badge, Alert, Form)",
+        "types/dentist.ts created with all interfaces and exports",
+        "npm install runs successfully"
+      ],
+      "testRequirements": [
+        "TypeScript compilation passes with no errors",
+        "All type exports accessible from types/dentist.ts"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T1.1",
+          "action": "Create directory structure app/find-a-dentist/, components/directory/, types/, data/dentists/",
+          "acceptanceCriteria": "Folders exist, no errors",
+          "skill": null,
+          "agent": null,
+          "input": "Project root directory",
+          "output": "Directory structure created"
+        },
+        {
+          "id": "T1.2",
+          "action": "Verify existing shadcn/ui components (Card, Button, Input, Select, Sheet, Accordion, Badge, Alert, Form) installed",
+          "acceptanceCriteria": "All 9 components present in components/ui/",
+          "skill": null,
+          "agent": null,
+          "input": "components/ui/ directory",
+          "output": "Component verification checklist"
+        },
+        {
+          "id": "T1.3",
+          "action": "Install additional dependencies if needed (react-hook-form, zod already in package.json)",
+          "acceptanceCriteria": "npm install runs successfully",
+          "skill": null,
+          "agent": null,
+          "input": "package.json",
+          "output": "Updated node_modules"
+        },
+        {
+          "id": "T1.4",
+          "action": "Create types/dentist.ts with all TypeScript interfaces",
+          "acceptanceCriteria": "File compiles without errors, exports all types",
+          "skill": null,
+          "agent": null,
+          "input": "Data model specification from PRD",
+          "output": "types/dentist.ts with Dentist, Education, Certification, Clinic, Address, Schedule, TimeSlot, Fee, FAQ, Availability, AppointmentRequest, ContactInfo interfaces"
+        }
+      ]
+    },
+    {
+      "id": "T2",
+      "phase": "Phase 1: Foundation",
+      "title": "Mock Data & API",
+      "description": "Create sample dentist profiles and mock API routes",
+      "complexity": "M",
+      "estimate": "2 days",
+      "dependencies": ["T1"],
+      "acceptanceCriteria": [
+        "data/dentists/sample-dentists.ts created with 6-8 dentist profiles",
+        "All sample data matches Dentist interface with no type errors",
+        "GET /api/dentists returns { dentists: [...] } with 200 status",
+        "GET /api/dentists/[id] returns single dentist or 404",
+        "POST /api/appointments/request returns { success: true, requestId, message }",
+        "All API routes tested with curl or Postman"
+      ],
+      "testRequirements": [
+        "Test GET /api/dentists returns valid JSON array",
+        "Test GET /api/dentists/[id] with valid ID returns single dentist",
+        "Test GET /api/dentists/[id] with invalid ID returns 404",
+        "Test POST /api/appointments/request with valid payload returns success",
+        "Test POST /api/appointments/request with invalid payload returns 400"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T2.1",
+          "action": "Create data/dentists/sample-dentists.ts with 6-8 dentist profile objects",
+          "acceptanceCriteria": "Data matches Dentist interface, no type errors. Includes: Dr. Jane Smith (General), Dr. Carlos Rivera (Orthodontics), Dr. Maria Santos (Periodontics), Dr. Michael Tan (Endodontics), Dr. Lisa Chen (Oral Surgery), Dr. Ramon Cruz (Prosthodontics), Dr. Anna Garcia (Pediatric), Dr. Benjamin Lee (Cosmetic)",
+          "skill": null,
+          "agent": null,
+          "input": "Sample data specification from PRD, Dentist interface",
+          "output": "data/dentists/sample-dentists.ts with export const sampleDentists: Dentist[]"
+        },
+        {
+          "id": "T2.2",
+          "action": "Create API route app/api/dentists/route.ts with GET handler",
+          "acceptanceCriteria": "Returns { dentists: [...] } with 200 status",
+          "skill": null,
+          "agent": null,
+          "input": "sample-dentists.ts data",
+          "output": "app/api/dentists/route.ts"
+        },
+        {
+          "id": "T2.3",
+          "action": "Create API route app/api/dentists/[id]/route.ts with GET handler",
+          "acceptanceCriteria": "Returns single dentist or 404",
+          "skill": null,
+          "agent": null,
+          "input": "sample-dentists.ts data, route param [id]",
+          "output": "app/api/dentists/[id]/route.ts"
+        },
+        {
+          "id": "T2.4",
+          "action": "Create API route app/api/appointments/request/route.ts with POST handler",
+          "acceptanceCriteria": "Returns { success: true, requestId, message }",
+          "skill": null,
+          "agent": null,
+          "input": "AppointmentRequest interface",
+          "output": "app/api/appointments/request/route.ts"
+        },
+        {
+          "id": "T2.5",
+          "action": "Test all API routes with curl or Postman",
+          "acceptanceCriteria": "All endpoints return expected JSON",
+          "skill": null,
+          "agent": null,
+          "input": "Running Next.js dev server",
+          "output": "Test results documentation"
+        }
+      ]
+    },
+    {
+      "id": "T3",
+      "phase": "Phase 2: Directory Listing Page",
+      "title": "Search Bar Component",
+      "description": "Create SearchBar component with debounced input and clear functionality",
+      "complexity": "S",
+      "estimate": "0.5 day",
+      "dependencies": ["T1"],
+      "acceptanceCriteria": [
+        "SearchBar component renders with placeholder text",
+        "onSearch callback fires 300ms after user stops typing",
+        "Clear button (X icon) clears input and fires onSearch('')",
+        "Focus state shows #FFCC5E border"
+      ],
+      "testRequirements": [
+        "Test search input renders with correct placeholder",
+        "Test debounce delay (onSearch fires 300ms after last keystroke)",
+        "Test clear button clears input and triggers callback",
+        "Test focus state applies amber border"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T3.1",
+          "action": "Create components/directory/SearchBar.tsx with Input from shadcn/ui",
+          "acceptanceCriteria": "Component renders with placeholder text",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Input component",
+          "output": "components/directory/SearchBar.tsx"
+        },
+        {
+          "id": "T3.2",
+          "action": "Implement debounced search (300ms delay) using useDebouncedCallback or useEffect",
+          "acceptanceCriteria": "onSearch callback fires 300ms after user stops typing",
+          "skill": null,
+          "agent": null,
+          "input": "User input from Input component",
+          "output": "Debounced search handler"
+        },
+        {
+          "id": "T3.3",
+          "action": "Add clear button (X icon) that resets search",
+          "acceptanceCriteria": "Clicking X clears input and fires onSearch('')",
+          "skill": null,
+          "agent": null,
+          "input": "lucide-react X icon",
+          "output": "Clear button with click handler"
+        },
+        {
+          "id": "T3.4",
+          "action": "Style with Dentalemon brand (amber focus ring)",
+          "acceptanceCriteria": "Focus state shows #FFCC5E border",
+          "skill": null,
+          "agent": null,
+          "input": "config/brand.ts colors",
+          "output": "Styled SearchBar component"
+        }
+      ]
+    },
+    {
+      "id": "T4",
+      "phase": "Phase 2: Directory Listing Page",
+      "title": "Filter Panel Component",
+      "description": "Create FilterPanel with specialty, location, services filters. Responsive (drawer on mobile, sidebar on desktop).",
+      "complexity": "M",
+      "estimate": "1.5 days",
+      "dependencies": ["T1", "T2"],
+      "acceptanceCriteria": [
+        "FilterPanel component renders 3 sections (specialty, location, services)",
+        "Checkboxes toggle, onFilterChange fires with updated array",
+        "Clear All Filters button resets all checkboxes",
+        "Renders as Sheet (drawer) on mobile (<768px), sidebar on desktop"
+      ],
+      "testRequirements": [
+        "Test specialty filter checkboxes toggle correctly",
+        "Test location filter checkboxes toggle correctly",
+        "Test services filter checkboxes toggle correctly",
+        "Test onFilterChange callback receives correct filter arrays",
+        "Test Clear All Filters resets all checkboxes",
+        "Test responsive behavior (Sheet on mobile, sidebar on desktop)"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T4.1",
+          "action": "Create components/directory/FilterPanel.tsx with Checkbox groups",
+          "acceptanceCriteria": "Component renders 3 sections (specialty, location, services)",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Checkbox, Sheet components",
+          "output": "components/directory/FilterPanel.tsx"
+        },
+        {
+          "id": "T4.2",
+          "action": "Implement specialty filter (8 dental specialties from data)",
+          "acceptanceCriteria": "Checkboxes toggle, onFilterChange fires with updated array",
+          "skill": null,
+          "agent": null,
+          "input": "Dental specialties list from sample data",
+          "output": "Specialty filter section"
+        },
+        {
+          "id": "T4.3",
+          "action": "Implement location filter (cities from dentist data)",
+          "acceptanceCriteria": "Checkboxes toggle, onFilterChange fires",
+          "skill": null,
+          "agent": null,
+          "input": "Unique cities from sample dentists",
+          "output": "Location filter section"
+        },
+        {
+          "id": "T4.4",
+          "action": "Implement services filter (services from dentist data)",
+          "acceptanceCriteria": "Checkboxes toggle, onFilterChange fires",
+          "skill": null,
+          "agent": null,
+          "input": "Unique services from sample dentists",
+          "output": "Services filter section"
+        },
+        {
+          "id": "T4.5",
+          "action": "Add Clear All Filters button",
+          "acceptanceCriteria": "Button resets all checkboxes, fires onFilterChange with empty arrays",
+          "skill": null,
+          "agent": null,
+          "input": "Current filter state",
+          "output": "Clear All button with reset handler"
+        },
+        {
+          "id": "T4.6",
+          "action": "Responsive: render as Sheet (drawer) on mobile (<768px), sidebar on desktop",
+          "acceptanceCriteria": "Drawer opens/closes on mobile, sidebar visible on desktop",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Sheet component, Tailwind breakpoints",
+          "output": "Responsive FilterPanel"
+        }
+      ]
+    },
+    {
+      "id": "T5",
+      "phase": "Phase 2: Directory Listing Page",
+      "title": "Active Filters & Dentist Card Components",
+      "description": "Create ActiveFilters chips and DentistCard with list/grid views",
+      "complexity": "M",
+      "estimate": "1 day",
+      "dependencies": ["T1"],
+      "acceptanceCriteria": [
+        "ActiveFilters displays chips for each active filter",
+        "Clicking X on chip removes filter via onRemove callback",
+        "DentistCard renders all 6 required fields (name, photo, specialty, services, location, availability)",
+        "Card supports list view (horizontal) and grid view (vertical)",
+        "Both CTAs (View Profile, Book Appointment) link correctly",
+        "Hover animation (lift effect) works"
+      ],
+      "testRequirements": [
+        "Test ActiveFilters renders chips for active filters",
+        "Test clicking X removes filter",
+        "Test DentistCard renders all fields correctly",
+        "Test list view layout (horizontal)",
+        "Test grid view layout (vertical)",
+        "Test View Profile CTA links to /find-a-dentist/[slug]",
+        "Test Book Appointment CTA triggers booking modal",
+        "Test hover animation"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T5.1",
+          "action": "Create components/directory/ActiveFilters.tsx with Badge components",
+          "acceptanceCriteria": "Component renders chips for each active filter",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Badge component, active filters array",
+          "output": "components/directory/ActiveFilters.tsx"
+        },
+        {
+          "id": "T5.2",
+          "action": "Implement dismiss handler (clicking X removes filter)",
+          "acceptanceCriteria": "onRemove callback fires with filter key/value",
+          "skill": null,
+          "agent": null,
+          "input": "Click event from X icon",
+          "output": "Dismiss handler function"
+        },
+        {
+          "id": "T5.3",
+          "action": "Create components/directory/DentistCard.tsx with Card from shadcn/ui",
+          "acceptanceCriteria": "Component renders with all props",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Card component, Dentist object",
+          "output": "components/directory/DentistCard.tsx"
+        },
+        {
+          "id": "T5.4",
+          "action": "Implement list view layout (horizontal, image left, info right)",
+          "acceptanceCriteria": "Card displays horizontally with proper spacing",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist data, viewMode prop",
+          "output": "List view layout"
+        },
+        {
+          "id": "T5.5",
+          "action": "Implement grid view layout (vertical, image top, info below)",
+          "acceptanceCriteria": "Card displays vertically, responsive",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist data, viewMode prop",
+          "output": "Grid view layout"
+        },
+        {
+          "id": "T5.6",
+          "action": "Add View Profile and Book Appointment buttons",
+          "acceptanceCriteria": "Both buttons link correctly (View Profile → /find-a-dentist/[slug], Book → booking modal)",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist slug, shadcn/ui Button",
+          "output": "CTA buttons with links"
+        },
+        {
+          "id": "T5.7",
+          "action": "Add hover animation (lift effect) using Framer Motion",
+          "acceptanceCriteria": "Card lifts slightly on hover, smooth transition",
+          "skill": null,
+          "agent": null,
+          "input": "Framer Motion motion.div",
+          "output": "Animated card component"
+        }
+      ]
+    },
+    {
+      "id": "T6",
+      "phase": "Phase 2: Directory Listing Page",
+      "title": "Dentist Grid & Directory Page",
+      "description": "Create DentistGrid component and main directory page with search/filter integration",
+      "complexity": "M",
+      "estimate": "1.5 days",
+      "dependencies": ["T2", "T3", "T4", "T5"],
+      "acceptanceCriteria": [
+        "DentistGrid renders all dentists using DentistCard",
+        "Grid layout (3 columns desktop, 2 tablet, 1 mobile) responsive",
+        "List layout (single column) functional",
+        "Directory page at /find-a-dentist fully functional",
+        "Search and filters update results array",
+        "Results count updates dynamically",
+        "List/grid view toggle switches viewMode state",
+        "Legal disclaimer visible",
+        "Page matches brand spacing patterns"
+      ],
+      "testRequirements": [
+        "Test DentistGrid renders all dentist cards",
+        "Test grid layout responsive breakpoints",
+        "Test list layout",
+        "Test search filters results correctly",
+        "Test filters update results correctly",
+        "Test results count accuracy",
+        "Test view toggle switches between list/grid",
+        "Test legal disclaimer renders"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T6.1",
+          "action": "Create components/directory/DentistGrid.tsx that maps dentists array to DentistCard",
+          "acceptanceCriteria": "All dentists render",
+          "skill": null,
+          "agent": null,
+          "input": "Dentists array, viewMode prop, DentistCard component",
+          "output": "components/directory/DentistGrid.tsx"
+        },
+        {
+          "id": "T6.2",
+          "action": "Implement grid layout (3 columns desktop, 2 tablet, 1 mobile)",
+          "acceptanceCriteria": "Responsive grid using Tailwind grid classes",
+          "skill": null,
+          "agent": null,
+          "input": "Tailwind grid utilities",
+          "output": "Grid layout with responsive columns"
+        },
+        {
+          "id": "T6.3",
+          "action": "Implement list layout (single column, full width)",
+          "acceptanceCriteria": "List view stacks cards vertically",
+          "skill": null,
+          "agent": null,
+          "input": "viewMode prop",
+          "output": "List layout"
+        },
+        {
+          "id": "T6.4",
+          "action": "Add stagger animation on initial load",
+          "acceptanceCriteria": "Cards fade in with stagger using Framer Motion",
+          "skill": null,
+          "agent": null,
+          "input": "Framer Motion staggerContainer pattern",
+          "output": "Staggered animation"
+        },
+        {
+          "id": "T6.5",
+          "action": "Create app/find-a-dentist/page.tsx with server component for initial data fetch",
+          "acceptanceCriteria": "Page pre-renders with dentists data",
+          "skill": null,
+          "agent": null,
+          "input": "GET /api/dentists endpoint",
+          "output": "app/find-a-dentist/page.tsx"
+        },
+        {
+          "id": "T6.6",
+          "action": "Implement search state and filter logic (client component)",
+          "acceptanceCriteria": "Search and filters update results array",
+          "skill": null,
+          "agent": null,
+          "input": "SearchBar and FilterPanel components",
+          "output": "Search and filter logic"
+        },
+        {
+          "id": "T6.7",
+          "action": "Add results count (X dentists found)",
+          "acceptanceCriteria": "Count updates dynamically",
+          "skill": null,
+          "agent": null,
+          "input": "Filtered dentists array length",
+          "output": "Results count display"
+        },
+        {
+          "id": "T6.8",
+          "action": "Add list/grid view toggle button",
+          "acceptanceCriteria": "Toggle switches viewMode state",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Button, lucide-react icons",
+          "output": "View toggle button"
+        },
+        {
+          "id": "T6.9",
+          "action": "Integrate SearchBar, FilterPanel, ActiveFilters, DentistGrid components",
+          "acceptanceCriteria": "All components render and interact correctly",
+          "skill": null,
+          "agent": null,
+          "input": "All directory components",
+          "output": "Integrated directory page"
+        },
+        {
+          "id": "T6.10",
+          "action": "Add LegalDisclaimer component at top of page",
+          "acceptanceCriteria": "Disclaimer visible with correct text",
+          "skill": null,
+          "agent": null,
+          "input": "LegalDisclaimer component (to be created)",
+          "output": "Directory page with disclaimer"
+        },
+        {
+          "id": "T6.11",
+          "action": "Style page with section spacing (py-20 md:py-32) and container",
+          "acceptanceCriteria": "Page matches brand spacing patterns",
+          "skill": null,
+          "agent": null,
+          "input": "CLAUDE.md styling conventions",
+          "output": "Styled directory page"
+        }
+      ]
+    },
+    {
+      "id": "GATE2",
+      "phase": "Phase 2: Directory Listing Page",
+      "title": "GATE: Directory Page Tests",
+      "description": "Write and run all tests for directory page components before proceeding",
+      "complexity": "M",
+      "estimate": "1 day",
+      "dependencies": ["T6"],
+      "acceptanceCriteria": [
+        "All interactions tested (search input, debounce, clear)",
+        "Filter logic tested (checkbox toggle, clear all)",
+        "Card rendering tested (all fields, CTA links)",
+        "Full directory page flow tested (search + filter + results)",
+        "All tests pass (exit code 0, no failures)"
+      ],
+      "testRequirements": [
+        "npm run test exits with code 0",
+        "Test report shows 0 failures",
+        "Coverage >80% for all directory components"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "GATE2.1",
+          "action": "Write component tests for SearchBar (search input, debounce, clear)",
+          "acceptanceCriteria": "All interactions tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "SearchBar component",
+          "output": "SearchBar.test.tsx"
+        },
+        {
+          "id": "GATE2.2",
+          "action": "Write component tests for FilterPanel (checkbox toggle, clear all)",
+          "acceptanceCriteria": "Filter logic tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "FilterPanel component",
+          "output": "FilterPanel.test.tsx"
+        },
+        {
+          "id": "GATE2.3",
+          "action": "Write component tests for DentistCard (render fields, CTA links)",
+          "acceptanceCriteria": "Card rendering tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "DentistCard component",
+          "output": "DentistCard.test.tsx"
+        },
+        {
+          "id": "GATE2.4",
+          "action": "Write integration test for directory page (search + filter + results)",
+          "acceptanceCriteria": "Full flow tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "Directory page",
+          "output": "page.test.tsx"
+        },
+        {
+          "id": "GATE2.5",
+          "action": "Run tests: npm run test",
+          "acceptanceCriteria": "exit code 0, no failures",
+          "skill": null,
+          "agent": null,
+          "input": "Test suite",
+          "output": "Test results"
+        },
+        {
+          "id": "GATE2.6",
+          "action": "Verify ALL tests pass",
+          "acceptanceCriteria": "test report shows 0 failures",
+          "skill": null,
+          "agent": null,
+          "input": "Test report",
+          "output": "Verified test results"
+        }
+      ]
+    },
+    {
+      "id": "T7",
+      "phase": "Phase 3: Dentist Profile Page",
+      "title": "Profile Components (Header, Bio, Schedules, Education)",
+      "description": "Create all profile page components: header, bio, clinic schedules, education & certifications",
+      "complexity": "L",
+      "estimate": "2 days",
+      "dependencies": ["T1", "T2"],
+      "acceptanceCriteria": [
+        "ProfileHeader displays photo, name, credentials, specialty, experience, availability",
+        "ProfileBio displays truncated bio with Read More expand",
+        "ClinicSchedules displays multiple clinics with schedules and fees",
+        "EducationCertifications displays credentials in timeline format"
+      ],
+      "testRequirements": [
+        "Test ProfileHeader renders all fields",
+        "Test ProfileBio truncation and expand functionality",
+        "Test ClinicSchedules renders multiple clinics correctly",
+        "Test EducationCertifications renders timeline"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T7.1",
+          "action": "Create components/directory/profile/ProfileHeader.tsx",
+          "acceptanceCriteria": "Component renders with dentist props",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist object",
+          "output": "components/directory/profile/ProfileHeader.tsx"
+        },
+        {
+          "id": "T7.2",
+          "action": "Create components/directory/profile/ProfileBio.tsx with Read More",
+          "acceptanceCriteria": "Bio truncates at 200 chars, expands on click",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist bio string",
+          "output": "components/directory/profile/ProfileBio.tsx"
+        },
+        {
+          "id": "T7.3",
+          "action": "Create components/directory/profile/ClinicSchedules.tsx",
+          "acceptanceCriteria": "Displays all clinics with schedules, contact info, fees, Book Here CTA",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist clinics array",
+          "output": "components/directory/profile/ClinicSchedules.tsx"
+        },
+        {
+          "id": "T7.4",
+          "action": "Create components/directory/profile/EducationCertifications.tsx",
+          "acceptanceCriteria": "Timeline format with icons, education + certifications",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist education and certifications arrays",
+          "output": "components/directory/profile/EducationCertifications.tsx"
+        }
+      ]
+    },
+    {
+      "id": "T8",
+      "phase": "Phase 3: Dentist Profile Page",
+      "title": "Profile Sidebar & Page Layout",
+      "description": "Create sidebar components (earliest availability, affiliations, FAQ) and assemble profile page",
+      "complexity": "M",
+      "estimate": "1.5 days",
+      "dependencies": ["T7"],
+      "acceptanceCriteria": [
+        "EarliestAvailability card displays date, time, clinic, fee, Book CTA",
+        "Affiliations displays list with badges",
+        "FAQ displays accordion with Q&A",
+        "Profile page at /find-a-dentist/[slug] fully functional",
+        "2-column layout (60% main, 40% sidebar) on desktop, stacks on mobile",
+        "Breadcrumb navigation functional",
+        "Legal disclaimer visible"
+      ],
+      "testRequirements": [
+        "Test EarliestAvailability renders correctly",
+        "Test Affiliations renders badges",
+        "Test FAQ accordion expands/collapses",
+        "Test profile page loads with valid slug",
+        "Test 404 with invalid slug",
+        "Test responsive layout (desktop 2-column, mobile stacked)"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T8.1",
+          "action": "Create components/directory/profile/EarliestAvailability.tsx",
+          "acceptanceCriteria": "Card displays date, time, clinic, fee with Book Appointment CTA",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist availability object",
+          "output": "components/directory/profile/EarliestAvailability.tsx"
+        },
+        {
+          "id": "T8.2",
+          "action": "Create components/directory/profile/Affiliations.tsx",
+          "acceptanceCriteria": "List of affiliations with badges",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist affiliations array",
+          "output": "components/directory/profile/Affiliations.tsx"
+        },
+        {
+          "id": "T8.3",
+          "action": "Create components/directory/profile/FAQ.tsx using Accordion",
+          "acceptanceCriteria": "FAQ questions expand/collapse",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist FAQ array, shadcn/ui Accordion",
+          "output": "components/directory/profile/FAQ.tsx"
+        },
+        {
+          "id": "T8.4",
+          "action": "Create app/find-a-dentist/[slug]/page.tsx with dynamic route",
+          "acceptanceCriteria": "Page loads with slug param, fetches dentist data",
+          "skill": null,
+          "agent": null,
+          "input": "GET /api/dentists/[id] endpoint",
+          "output": "app/find-a-dentist/[slug]/page.tsx"
+        },
+        {
+          "id": "T8.5",
+          "action": "Implement 2-column layout (60% main, 40% sidebar) on desktop",
+          "acceptanceCriteria": "Columns responsive, stack on mobile",
+          "skill": null,
+          "agent": null,
+          "input": "Tailwind grid utilities",
+          "output": "Responsive 2-column layout"
+        },
+        {
+          "id": "T8.6",
+          "action": "Integrate all profile components in page layout",
+          "acceptanceCriteria": "All sections render in correct order",
+          "skill": null,
+          "agent": null,
+          "input": "All profile components",
+          "output": "Assembled profile page"
+        },
+        {
+          "id": "T8.7",
+          "action": "Add breadcrumb navigation (Home > Find a Dentist > [Name])",
+          "acceptanceCriteria": "Breadcrumbs functional, clickable links",
+          "skill": null,
+          "agent": null,
+          "input": "Next.js Link, dentist name",
+          "output": "Breadcrumb navigation"
+        },
+        {
+          "id": "T8.8",
+          "action": "Add LegalDisclaimer at bottom of page",
+          "acceptanceCriteria": "Disclaimer visible",
+          "skill": null,
+          "agent": null,
+          "input": "LegalDisclaimer component",
+          "output": "Profile page with disclaimer"
+        }
+      ]
+    },
+    {
+      "id": "GATE3",
+      "phase": "Phase 3: Dentist Profile Page",
+      "title": "GATE: Profile Page Tests",
+      "description": "Write and run all tests for profile page components before proceeding",
+      "complexity": "M",
+      "estimate": "1 day",
+      "dependencies": ["T8"],
+      "acceptanceCriteria": [
+        "All profile components tested (header, bio, schedules, education, sidebar)",
+        "Profile page integration tested (full page render)",
+        "Edge cases tested (invalid slug → 404)",
+        "All tests pass (exit code 0, no failures)"
+      ],
+      "testRequirements": [
+        "npm run test exits with code 0",
+        "Test report shows 0 failures",
+        "Coverage >80% for all profile components"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "GATE3.1",
+          "action": "Write component tests for ProfileHeader (render all fields)",
+          "acceptanceCriteria": "All props tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "ProfileHeader component",
+          "output": "ProfileHeader.test.tsx"
+        },
+        {
+          "id": "GATE3.2",
+          "action": "Write component tests for ClinicSchedules (multiple clinics, schedule display)",
+          "acceptanceCriteria": "Schedule rendering tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "ClinicSchedules component",
+          "output": "ClinicSchedules.test.tsx"
+        },
+        {
+          "id": "GATE3.3",
+          "action": "Write component tests for FAQ accordion (expand/collapse)",
+          "acceptanceCriteria": "Accordion interaction tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "FAQ component",
+          "output": "FAQ.test.tsx"
+        },
+        {
+          "id": "GATE3.4",
+          "action": "Write integration test for profile page (full page render)",
+          "acceptanceCriteria": "Page loads with valid slug, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "Profile page",
+          "output": "[slug]/page.test.tsx"
+        },
+        {
+          "id": "GATE3.5",
+          "action": "Run tests: npm run test",
+          "acceptanceCriteria": "exit code 0, no failures",
+          "skill": null,
+          "agent": null,
+          "input": "Test suite",
+          "output": "Test results"
+        },
+        {
+          "id": "GATE3.6",
+          "action": "Verify ALL tests pass",
+          "acceptanceCriteria": "test report shows 0 failures",
+          "skill": null,
+          "agent": null,
+          "input": "Test report",
+          "output": "Verified test results"
+        }
+      ]
+    },
+    {
+      "id": "T9",
+      "phase": "Phase 4: Booking Flow",
+      "title": "Booking Wizard Shell & Step Components",
+      "description": "Create booking wizard with React Hook Form + Zod, implement all 3 steps",
+      "complexity": "L",
+      "estimate": "3 days",
+      "dependencies": ["T1", "T2"],
+      "acceptanceCriteria": [
+        "BookingWizard with multi-step form, React Hook Form + Zod validation",
+        "Step indicators show progress (numbered dots)",
+        "Form data persists across steps (back/forward navigation)",
+        "Step 1: Patient type selection (New/Existing) functional",
+        "Step 2: Appointment details (type, date, time, reason) functional",
+        "Step 3: Contact form (name, phone, email) with validation",
+        "Submit handler posts to /api/appointments/request",
+        "Success/error handling displays appropriate messages",
+        "Legal disclaimer visible in wizard"
+      ],
+      "testRequirements": [
+        "Test wizard opens from Book Appointment CTA",
+        "Test step navigation (Next/Back buttons)",
+        "Test form validation on each step",
+        "Test form data persistence across steps",
+        "Test submit handler success path",
+        "Test submit handler error path",
+        "Test form reset after successful submission"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T9.1",
+          "action": "Create components/directory/BookingWizard.tsx with React Hook Form + Zod",
+          "acceptanceCriteria": "Form initialized with validation schema",
+          "skill": null,
+          "agent": null,
+          "input": "react-hook-form, zod, shadcn/ui Form",
+          "output": "components/directory/BookingWizard.tsx"
+        },
+        {
+          "id": "T9.2",
+          "action": "Implement step state (currentStep 1-3) and step indicator",
+          "acceptanceCriteria": "State controls which step is visible, dots show progress",
+          "skill": null,
+          "agent": null,
+          "input": "React useState",
+          "output": "Step state and indicator UI"
+        },
+        {
+          "id": "T9.3",
+          "action": "Create components/directory/booking/PatientTypeStep.tsx",
+          "acceptanceCriteria": "Radio or card selection UI, validation before Next",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui RadioGroup or custom card UI",
+          "output": "components/directory/booking/PatientTypeStep.tsx"
+        },
+        {
+          "id": "T9.4",
+          "action": "Create components/directory/booking/AppointmentDetailsStep.tsx",
+          "acceptanceCriteria": "Consultation type dropdown, date picker, time dropdown, reason textarea, validation",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Select, Popover, Calendar, Textarea",
+          "output": "components/directory/booking/AppointmentDetailsStep.tsx"
+        },
+        {
+          "id": "T9.5",
+          "action": "Create components/directory/booking/ContactInfoStep.tsx",
+          "acceptanceCriteria": "Name, phone, email inputs with validation, consent checkbox",
+          "skill": null,
+          "agent": null,
+          "input": "shadcn/ui Input, Checkbox, Zod validation schemas",
+          "output": "components/directory/booking/ContactInfoStep.tsx"
+        },
+        {
+          "id": "T9.6",
+          "action": "Implement submit handler in BookingWizard",
+          "acceptanceCriteria": "Handler posts to /api/appointments/request, shows loading state",
+          "skill": null,
+          "agent": null,
+          "input": "Booking form data, fetch API",
+          "output": "Submit handler with loading/success/error states"
+        },
+        {
+          "id": "T9.7",
+          "action": "Handle success response (display confirmation)",
+          "acceptanceCriteria": "Success message shows requestId, next steps",
+          "skill": null,
+          "agent": null,
+          "input": "API response",
+          "output": "Confirmation UI"
+        },
+        {
+          "id": "T9.8",
+          "action": "Handle error response (display error message)",
+          "acceptanceCriteria": "Error message clear, allows retry",
+          "skill": null,
+          "agent": null,
+          "input": "API error response",
+          "output": "Error UI"
+        },
+        {
+          "id": "T9.9",
+          "action": "Add LegalDisclaimer in wizard",
+          "acceptanceCriteria": "Disclaimer visible, explains request vs. confirmed appointment",
+          "skill": null,
+          "agent": null,
+          "input": "LegalDisclaimer component with variant=booking",
+          "output": "Wizard with disclaimer"
+        }
+      ]
+    },
+    {
+      "id": "GATE4",
+      "phase": "Phase 4: Booking Flow",
+      "title": "GATE: Booking Flow Tests",
+      "description": "Write and run all tests for booking flow before proceeding",
+      "complexity": "M",
+      "estimate": "1 day",
+      "dependencies": ["T9"],
+      "acceptanceCriteria": [
+        "All step components tested (PatientTypeStep, AppointmentDetailsStep, ContactInfoStep)",
+        "Full booking flow tested (3 steps → submit → confirmation)",
+        "Form validation tested for all fields",
+        "Submit success/error handling tested",
+        "All tests pass (exit code 0, no failures)"
+      ],
+      "testRequirements": [
+        "npm run test exits with code 0",
+        "Test report shows 0 failures",
+        "Coverage >80% for all booking components"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "GATE4.1",
+          "action": "Write component tests for PatientTypeStep (selection logic)",
+          "acceptanceCriteria": "Selection tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "PatientTypeStep component",
+          "output": "PatientTypeStep.test.tsx"
+        },
+        {
+          "id": "GATE4.2",
+          "action": "Write component tests for AppointmentDetailsStep (field validation)",
+          "acceptanceCriteria": "All validations tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "AppointmentDetailsStep component",
+          "output": "AppointmentDetailsStep.test.tsx"
+        },
+        {
+          "id": "GATE4.3",
+          "action": "Write component tests for ContactInfoStep (phone/email validation)",
+          "acceptanceCriteria": "Validation logic tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "ContactInfoStep component",
+          "output": "ContactInfoStep.test.tsx"
+        },
+        {
+          "id": "GATE4.4",
+          "action": "Write integration test for full booking flow (3 steps → submit)",
+          "acceptanceCriteria": "Complete flow tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "BookingWizard component",
+          "output": "BookingWizard.test.tsx"
+        },
+        {
+          "id": "GATE4.5",
+          "action": "Write test for form submission success/error handling",
+          "acceptanceCriteria": "Both paths tested, tests pass",
+          "skill": null,
+          "agent": null,
+          "input": "BookingWizard submit handler",
+          "output": "Submission tests"
+        },
+        {
+          "id": "GATE4.6",
+          "action": "Run tests: npm run test",
+          "acceptanceCriteria": "exit code 0, no failures",
+          "skill": null,
+          "agent": null,
+          "input": "Test suite",
+          "output": "Test results"
+        },
+        {
+          "id": "GATE4.7",
+          "action": "Verify ALL tests pass",
+          "acceptanceCriteria": "test report shows 0 failures",
+          "skill": null,
+          "agent": null,
+          "input": "Test report",
+          "output": "Verified test results"
+        }
+      ]
+    },
+    {
+      "id": "T10",
+      "phase": "Phase 5: SEO & Metadata",
+      "title": "JSON-LD, Metadata, Sitemap",
+      "description": "Implement SEO optimization: structured data, page metadata, sitemap",
+      "complexity": "M",
+      "estimate": "2 days",
+      "dependencies": ["T8"],
+      "acceptanceCriteria": [
+        "generateDentistSchema utility function created, returns valid JSON-LD",
+        "JSON-LD schema validates with Google Structured Data Testing Tool",
+        "Unique metadata (title, description, OG tags) on directory and profile pages",
+        "Sitemap includes all dentist profile URLs",
+        "Sitemap accessible at /sitemap.xml"
+      ],
+      "testRequirements": [
+        "Test generateDentistSchema returns valid schema object",
+        "Validate schema with Google tool (manual verification)",
+        "Test metadata renders in page head",
+        "Test sitemap generates all URLs correctly"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T10.1",
+          "action": "Create lib/seo/generateDentistSchema.ts utility function",
+          "acceptanceCriteria": "Function accepts Dentist object, returns JSON-LD",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist object, schema.org/Dentist specification",
+          "output": "lib/seo/generateDentistSchema.ts"
+        },
+        {
+          "id": "T10.2",
+          "action": "Implement schema.org/Dentist schema with required fields",
+          "acceptanceCriteria": "Schema includes name, description, address, telephone, email, openingHours, priceRange",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist data",
+          "output": "Complete JSON-LD object"
+        },
+        {
+          "id": "T10.3",
+          "action": "Inject JSON-LD script tag in profile page head",
+          "acceptanceCriteria": "Script tag renders in <head>, type=application/ld+json",
+          "skill": null,
+          "agent": null,
+          "input": "Next.js Head or metadata API",
+          "output": "Profile page with JSON-LD"
+        },
+        {
+          "id": "T10.4",
+          "action": "Validate schema with Google Structured Data Testing Tool",
+          "acceptanceCriteria": "Validator shows no errors, Dentist type recognized",
+          "skill": null,
+          "agent": null,
+          "input": "Profile page URL or HTML",
+          "output": "Validation results"
+        },
+        {
+          "id": "T10.5",
+          "action": "Add metadata to app/find-a-dentist/page.tsx",
+          "acceptanceCriteria": "Title: 'Find a Dentist | Dentalemon', description 150-160 chars, OG tags",
+          "skill": null,
+          "agent": null,
+          "input": "Next.js metadata API",
+          "output": "Directory page metadata"
+        },
+        {
+          "id": "T10.6",
+          "action": "Add dynamic metadata to app/find-a-dentist/[slug]/page.tsx",
+          "acceptanceCriteria": "Title: '[Dentist Name] - [Specialty] | Dentalemon', OG tags with dentist photo",
+          "skill": null,
+          "agent": null,
+          "input": "Dentist data, Next.js generateMetadata",
+          "output": "Profile page metadata"
+        },
+        {
+          "id": "T10.7",
+          "action": "Create or update app/sitemap.ts",
+          "acceptanceCriteria": "Sitemap generates URLs for directory + all dentist profiles",
+          "skill": null,
+          "agent": null,
+          "input": "Sample dentists data",
+          "output": "app/sitemap.ts"
+        },
+        {
+          "id": "T10.8",
+          "action": "Verify sitemap accessible at /sitemap.xml",
+          "acceptanceCriteria": "Sitemap renders valid XML with all URLs",
+          "skill": null,
+          "agent": null,
+          "input": "Next.js dev server",
+          "output": "Generated sitemap.xml"
+        }
+      ]
+    },
+    {
+      "id": "T11",
+      "phase": "Phase 6: Testing & QA",
+      "title": "Component, Integration, Accessibility, Performance Testing",
+      "description": "Comprehensive testing: components, flows, accessibility, performance, responsive, cross-browser",
+      "complexity": "M",
+      "estimate": "2 days",
+      "dependencies": ["GATE2", "GATE3", "GATE4", "T10"],
+      "acceptanceCriteria": [
+        "All component tests pass with >80% coverage",
+        "All integration tests pass (end-to-end flows)",
+        "Accessibility audit passes (no critical/serious issues, WCAG 2.1 AA)",
+        "Performance audit passes (Lighthouse >90 performance, >95 accessibility)",
+        "Responsive testing passes on mobile, tablet, desktop",
+        "Cross-browser testing passes on Chrome, Firefox, Safari, Edge"
+      ],
+      "testRequirements": [
+        "npm run test exits with code 0",
+        "Test coverage report shows >80% for all directories",
+        "axe DevTools shows no critical/serious issues",
+        "Lighthouse performance score >90, accessibility >95",
+        "Manual testing on 3 breakpoints confirms no layout issues",
+        "Manual testing on 4 browsers confirms functionality"
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": "T11.1",
+          "action": "Verify all component tests exist and pass",
+          "acceptanceCriteria": "Coverage >80% for directory, profile, booking components",
+          "skill": null,
+          "agent": null,
+          "input": "Test suite",
+          "output": "Coverage report"
+        },
+        {
+          "id": "T11.2",
+          "action": "Test integration flow: Directory → Search → Filter → View Profile",
+          "acceptanceCriteria": "Flow works, no errors",
+          "skill": null,
+          "agent": null,
+          "input": "Running application",
+          "output": "Manual test results"
+        },
+        {
+          "id": "T11.3",
+          "action": "Test integration flow: Directory → Dentist Card → Booking → Submit",
+          "acceptanceCriteria": "Full booking flow works",
+          "skill": null,
+          "agent": null,
+          "input": "Running application",
+          "output": "Manual test results"
+        },
+        {
+          "id": "T11.4",
+          "action": "Run axe DevTools on directory page",
+          "acceptanceCriteria": "No critical or serious issues",
+          "skill": null,
+          "agent": null,
+          "input": "Directory page in browser",
+          "output": "axe report"
+        },
+        {
+          "id": "T11.5",
+          "action": "Run axe DevTools on profile page",
+          "acceptanceCriteria": "No critical or serious issues",
+          "skill": null,
+          "agent": null,
+          "input": "Profile page in browser",
+          "output": "axe report"
+        },
+        {
+          "id": "T11.6",
+          "action": "Run axe DevTools on booking modal",
+          "acceptanceCriteria": "No critical or serious issues",
+          "skill": null,
+          "agent": null,
+          "input": "Booking modal in browser",
+          "output": "axe report"
+        },
+        {
+          "id": "T11.7",
+          "action": "Manual keyboard navigation test (Tab, Enter, Esc)",
+          "acceptanceCriteria": "All interactive elements accessible via keyboard",
+          "skill": null,
+          "agent": null,
+          "input": "Running application",
+          "output": "Keyboard navigation test results"
+        },
+        {
+          "id": "T11.8",
+          "action": "Run Lighthouse on directory page",
+          "acceptanceCriteria": "Performance score >90, accessibility >95",
+          "skill": null,
+          "agent": null,
+          "input": "Directory page",
+          "output": "Lighthouse report"
+        },
+        {
+          "id": "T11.9",
+          "action": "Run Lighthouse on profile page",
+          "acceptanceCriteria": "Performance score >90, accessibility >95",
+          "skill": null,
+          "agent": null,
+          "input": "Profile page",
+          "output": "Lighthouse report"
+        },
+        {
+          "id": "T11.10",
+          "action": "Test responsive on mobile (375px width)",
+          "acceptanceCriteria": "No horizontal scroll, filters in drawer, cards stack",
+          "skill": null,
+          "agent": null,
+          "input": "Chrome DevTools mobile emulation",
+          "output": "Mobile test results"
+        },
+        {
+          "id": "T11.11",
+          "action": "Test responsive on tablet (768px width)",
+          "acceptanceCriteria": "Layouts adjust appropriately, no layout breaks",
+          "skill": null,
+          "agent": null,
+          "input": "Chrome DevTools tablet emulation",
+          "output": "Tablet test results"
+        },
+        {
+          "id": "T11.12",
+          "action": "Test responsive on desktop (1280px+ width)",
+          "acceptanceCriteria": "Full layout, proper spacing, sidebars visible",
+          "skill": null,
+          "agent": null,
+          "input": "Desktop browser",
+          "output": "Desktop test results"
+        },
+        {
+          "id": "T11.13",
+          "action": "Test on Chrome (latest)",
+          "acceptanceCriteria": "All features functional, no console errors",
+          "skill": null,
+          "agent": null,
+          "input": "Chrome browser",
+          "output": "Chrome test results"
+        },
+        {
+          "id": "T11.14",
+          "action": "Test on Firefox (latest)",
+          "acceptanceCriteria": "All features functional, no console errors",
+          "skill": null,
+          "agent": null,
+          "input": "Firefox browser",
+          "output": "Firefox test results"
+        },
+        {
+          "id": "T11.15",
+          "action": "Test on Safari (latest)",
+          "acceptanceCriteria": "All features functional, no console errors",
+          "skill": null,
+          "agent": null,
+          "input": "Safari browser",
+          "output": "Safari test results"
+        },
+        {
+          "id": "T11.16",
+          "action": "Test on Edge (latest)",
+          "acceptanceCriteria": "All features functional, no console errors",
+          "skill": null,
+          "agent": null,
+          "input": "Edge browser",
+          "output": "Edge test results"
+        }
+      ]
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC1",
+      "criterion": "Directory page loads with search bar, filters (specialty, location, services), and dentist listing with list/grid view toggle",
+      "acceptance": "Page renders in <2s, all filters functional, toggle persists view preference"
+    },
+    {
+      "id": "SC2",
+      "criterion": "Dentist cards display: name, photo, specialty, services, location, availability indicator, booking CTA",
+      "acceptance": "All 6 required fields visible on every card, CTA clickable"
+    },
+    {
+      "id": "SC3",
+      "criterion": "Dentist profile page displays full profile: credentials, education, certifications, clinic schedules, fees, bio, affiliations, FAQ",
+      "acceptance": "All 9 sections present and populated with sample data"
+    },
+    {
+      "id": "SC4",
+      "criterion": "Booking flow: 3-step wizard (patient type > appointment details > contact info) functions end-to-end",
+      "acceptance": "User can complete all 3 steps, submit request, see confirmation"
+    },
+    {
+      "id": "SC5",
+      "criterion": "All pages mobile-responsive at breakpoints: sm (640px), md (768px), lg (1024px)",
+      "acceptance": "No horizontal scroll, readable text, tappable CTAs on all breakpoints"
+    },
+    {
+      "id": "SC6",
+      "criterion": "No PHI or sensitive patient data stored or displayed",
+      "acceptance": "Code review confirms no DOB, health conditions, insurance details, or medical history fields"
+    },
+    {
+      "id": "SC7",
+      "criterion": "Disclaimer language present on directory and booking pages",
+      "acceptance": "Legal disclaimers visible, clear language about request vs. confirmed appointment"
+    },
+    {
+      "id": "SC8",
+      "criterion": "JSON-LD structured data (Dentist schema) on profile pages",
+      "acceptance": "Schema validator passes for all profile pages"
+    },
+    {
+      "id": "SC9",
+      "criterion": "URL structure supports SEO: /find-a-dentist, /find-a-dentist/[slug]",
+      "acceptance": "URLs indexable, sitemap includes all dentist profiles"
+    },
+    {
+      "id": "SC10",
+      "criterion": "Sample data via mock API route /api/dentists with 6-8 dentist profiles",
+      "acceptance": "API returns valid JSON matching TypeScript interfaces"
+    }
+  ],
+  "phase_gates": [
+    {
+      "name": "GATE: Directory Page Tests",
+      "phase": "Phase 2",
+      "acceptanceCriteria": [
+        "All directory component tests written and passing",
+        "Search, filter, card rendering tested",
+        "Integration test for directory page passes",
+        "npm run test exits with code 0, no failures"
+      ]
+    },
+    {
+      "name": "GATE: Profile Page Tests",
+      "phase": "Phase 3",
+      "acceptanceCriteria": [
+        "All profile component tests written and passing",
+        "Profile header, bio, schedules, education, sidebar tested",
+        "Integration test for profile page passes",
+        "Edge cases (invalid slug) tested",
+        "npm run test exits with code 0, no failures"
+      ]
+    },
+    {
+      "name": "GATE: Booking Flow Tests",
+      "phase": "Phase 4",
+      "acceptanceCriteria": [
+        "All booking step component tests written and passing",
+        "Form validation tested for all fields",
+        "Full 3-step flow integration test passes",
+        "Submit success and error paths tested",
+        "npm run test exits with code 0, no failures"
+      ]
+    }
+  ],
+  "nfr": {
+    "performance": {
+      "page_load": "<2s on 3G connection for directory listing",
+      "api_response": "<200ms for /api/dentists",
+      "time_to_interactive": "<100ms on mobile"
+    },
+    "bundle_size": "<150KB gzipped for directory page JS bundle",
+    "browser_support": ["Chrome (last 2 versions)", "Firefox (last 2 versions)", "Safari (last 2 versions)", "Edge (last 2 versions)", "iOS Safari 14+", "Chrome Android 90+"],
+    "accessibility": "WCAG 2.1 AA compliance (4.5:1 color contrast, keyboard navigation, screen reader support, 44x44px touch targets)"
+  }
+}
