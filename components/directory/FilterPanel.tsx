@@ -11,6 +11,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 interface FilterPanelProps {
   filters: DirectoryFilters
@@ -30,34 +36,24 @@ interface FilterSectionProps {
   count?: number
 }
 
-function FilterSection({ title, options, selected, onToggle, count = 0 }: FilterSectionProps) {
+function FilterCheckboxes({ title, options, selected, onToggle }: FilterSectionProps) {
   return (
-    <div className="space-y-3">
-      <h3 className="font-sans font-semibold text-sm text-foreground">
-        {title}
-        {count > 0 && (
-          <span className="ml-1.5 inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
-            {count}
-          </span>
-        )}
-      </h3>
-      <div className="space-y-2">
-        {options.map((option) => (
-          <div key={option} className="flex items-center space-x-2">
-            <Checkbox
-              id={`${title}-${option}`}
-              checked={selected.includes(option)}
-              onCheckedChange={() => onToggle(option)}
-            />
-            <Label
-              htmlFor={`${title}-${option}`}
-              className="text-sm font-normal cursor-pointer"
-            >
-              {option}
-            </Label>
-          </div>
-        ))}
-      </div>
+    <div className="space-y-2">
+      {options.map((option) => (
+        <div key={option} className="flex items-center space-x-2">
+          <Checkbox
+            id={`${title}-${option}`}
+            checked={selected.includes(option)}
+            onCheckedChange={() => onToggle(option)}
+          />
+          <Label
+            htmlFor={`${title}-${option}`}
+            className="text-sm font-normal cursor-pointer"
+          >
+            {option}
+          </Label>
+        </div>
+      ))}
     </div>
   )
 }
@@ -116,7 +112,7 @@ function FilterPanelContent({
     filters.services.length > 0
 
   return (
-    <div className="space-y-6">
+    <>
       <div className="flex items-center justify-between">
         <h2 className="font-sans text-lg font-semibold">Filters</h2>
         {hasActiveFilters && (
@@ -131,55 +127,204 @@ function FilterPanelContent({
         )}
       </div>
 
-      <div className="space-y-6">
-        <FilterSection
-          title="Specialty"
-          options={specialties}
-          selected={filters.specialties}
-          onToggle={handleToggleSpecialty}
-          count={filters.specialties.length}
-        />
+      <Accordion type="multiple" defaultValue={["specialty", "location", "services"]}>
+        <AccordionItem value="specialty">
+          <AccordionTrigger className="font-sans font-semibold text-sm text-foreground hover:no-underline py-3">
+            <span className="flex items-center gap-1.5">
+              Specialty
+              {filters.specialties.length > 0 && (
+                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                  {filters.specialties.length}
+                </span>
+              )}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <FilterCheckboxes
+              title="Specialty"
+              options={specialties}
+              selected={filters.specialties}
+              onToggle={handleToggleSpecialty}
+            />
+          </AccordionContent>
+        </AccordionItem>
 
-        <FilterSection
-          title="Location"
-          options={locations}
-          selected={filters.locations}
-          onToggle={handleToggleLocation}
-          count={filters.locations.length}
-        />
+        <AccordionItem value="location">
+          <AccordionTrigger className="font-sans font-semibold text-sm text-foreground hover:no-underline py-3">
+            <span className="flex items-center gap-1.5">
+              Location
+              {filters.locations.length > 0 && (
+                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                  {filters.locations.length}
+                </span>
+              )}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <FilterCheckboxes
+              title="Location"
+              options={locations}
+              selected={filters.locations}
+              onToggle={handleToggleLocation}
+            />
+          </AccordionContent>
+        </AccordionItem>
 
-        <FilterSection
-          title="Services"
-          options={services}
-          selected={filters.services}
-          onToggle={handleToggleService}
-          count={filters.services.length}
-        />
-      </div>
-    </div>
+        <AccordionItem value="services" className="border-b-0">
+          <AccordionTrigger className="font-sans font-semibold text-sm text-foreground hover:no-underline py-3">
+            <span className="flex items-center gap-1.5">
+              Services
+              {filters.services.length > 0 && (
+                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                  {filters.services.length}
+                </span>
+              )}
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <FilterCheckboxes
+              title="Services"
+              options={services}
+              selected={filters.services}
+              onToggle={handleToggleService}
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </>
   )
 }
 
 export function FilterPanel(props: FilterPanelProps) {
   const { mobileOpen = false, onMobileOpenChange } = props
 
+  const hasActiveFilters =
+    props.filters.specialties.length > 0 ||
+    props.filters.locations.length > 0 ||
+    props.filters.services.length > 0
+
+  const handleClearAll = () => {
+    props.onFilterChange({
+      specialties: [],
+      locations: [],
+      services: [],
+    })
+  }
+
   return (
     <>
       {/* Desktop: Sidebar */}
       <div className="hidden md:block w-64 flex-shrink-0">
-        <div className="sticky top-24 space-y-6 rounded-lg border border-border bg-card p-6 shadow-sm">
+        <div className="sticky top-24 rounded-lg border border-border bg-card p-6 shadow-sm">
           <FilterPanelContent {...props} />
         </div>
       </div>
 
-      {/* Mobile: Dialog modal (triggered externally) */}
+      {/* Mobile: Dialog modal with fixed header/footer, scrollable body */}
       <Dialog open={mobileOpen} onOpenChange={onMobileOpenChange}>
-        <DialogContent className="sm:max-w-[400px] max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="font-sans">Filters</DialogTitle>
-          </DialogHeader>
-          <FilterPanelContent {...props} />
-          <div className="pt-4 border-t">
+        <DialogContent className="sm:max-w-[400px] max-h-[80vh] flex flex-col p-0 gap-0">
+          {/* Fixed header */}
+          <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b flex-shrink-0">
+            <DialogHeader className="p-0 space-y-0">
+              <DialogTitle className="font-sans text-lg">Filters</DialogTitle>
+            </DialogHeader>
+            {hasActiveFilters && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearAll}
+                className="h-8 px-2 text-sm"
+              >
+                Clear All
+              </Button>
+            )}
+          </div>
+
+          {/* Scrollable filter content */}
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            <Accordion type="multiple" defaultValue={["specialty", "location", "services"]}>
+              <AccordionItem value="specialty">
+                <AccordionTrigger className="font-sans font-semibold text-sm text-foreground hover:no-underline py-3">
+                  <span className="flex items-center gap-1.5">
+                    Specialty
+                    {props.filters.specialties.length > 0 && (
+                      <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                        {props.filters.specialties.length}
+                      </span>
+                    )}
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <FilterCheckboxes
+                    title="Specialty"
+                    options={props.specialties}
+                    selected={props.filters.specialties}
+                    onToggle={(specialty) => {
+                      const newSpecialties = props.filters.specialties.includes(specialty)
+                        ? props.filters.specialties.filter((s) => s !== specialty)
+                        : [...props.filters.specialties, specialty]
+                      props.onFilterChange({ ...props.filters, specialties: newSpecialties })
+                    }}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="location">
+                <AccordionTrigger className="font-sans font-semibold text-sm text-foreground hover:no-underline py-3">
+                  <span className="flex items-center gap-1.5">
+                    Location
+                    {props.filters.locations.length > 0 && (
+                      <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                        {props.filters.locations.length}
+                      </span>
+                    )}
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <FilterCheckboxes
+                    title="Location"
+                    options={props.locations}
+                    selected={props.filters.locations}
+                    onToggle={(location) => {
+                      const newLocations = props.filters.locations.includes(location)
+                        ? props.filters.locations.filter((l) => l !== location)
+                        : [...props.filters.locations, location]
+                      props.onFilterChange({ ...props.filters, locations: newLocations })
+                    }}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="services" className="border-b-0">
+                <AccordionTrigger className="font-sans font-semibold text-sm text-foreground hover:no-underline py-3">
+                  <span className="flex items-center gap-1.5">
+                    Services
+                    {props.filters.services.length > 0 && (
+                      <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                        {props.filters.services.length}
+                      </span>
+                    )}
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <FilterCheckboxes
+                    title="Services"
+                    options={props.services}
+                    selected={props.filters.services}
+                    onToggle={(service) => {
+                      const newServices = props.filters.services.includes(service)
+                        ? props.filters.services.filter((s) => s !== service)
+                        : [...props.filters.services, service]
+                      props.onFilterChange({ ...props.filters, services: newServices })
+                    }}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+
+          {/* Fixed footer CTA */}
+          <div className="px-6 pb-6 pt-4 border-t flex-shrink-0">
             <Button
               className="w-full rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90"
               onClick={() => onMobileOpenChange?.(false)}

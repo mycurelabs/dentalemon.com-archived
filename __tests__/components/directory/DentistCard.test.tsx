@@ -177,9 +177,9 @@ describe('DentistCard', () => {
     it('applies grid view classes when viewMode is grid', () => {
       const { container } = render(<DentistCard dentist={mockDentist} viewMode="grid" />)
 
-      // Card should NOT have flex-row class in grid view
+      // Card always has flex-row for mobile list view, but adds md:block for desktop grid
       const card = container.querySelector('[class*="overflow-hidden"]')
-      expect(card).not.toHaveClass('flex-row')
+      expect(card).toHaveClass('flex', 'flex-row', 'md:block')
     })
 
     it('applies list view classes when viewMode is list', () => {
@@ -190,16 +190,14 @@ describe('DentistCard', () => {
       expect(card).toHaveClass('flex', 'flex-row')
     })
 
-    it('renders buttons as full width in grid view', () => {
+    it('renders buttons with responsive width in grid view', () => {
       render(<DentistCard dentist={mockDentist} viewMode="grid" />)
 
       const bookButton = screen.getByText('Book Appointment')
 
-      // Book button should have w-full class in grid view
-      expect(bookButton).toHaveClass('w-full')
+      // Book button should have md:w-full for desktop grid view (inline on mobile)
+      expect(bookButton).toHaveClass('md:w-full')
 
-      // View Profile link should be wrapped in an element with w-full
-      // (asChild with mocked Link may not forward classes perfectly)
       const viewProfileLink = screen.getByText('View Profile').closest('a')
       expect(viewProfileLink).toBeInTheDocument()
     })
