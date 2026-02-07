@@ -40,9 +40,9 @@ describe("AppointmentDetailsStep", () => {
   it("renders all appointment detail fields", () => {
     render(<TestWrapper />)
 
-    expect(screen.getByText("Consultation Type *")).toBeInTheDocument()
-    expect(screen.getByText("Preferred Date *")).toBeInTheDocument()
-    expect(screen.getByText("Preferred Time *")).toBeInTheDocument()
+    expect(screen.getByText(/Consultation Type/)).toBeInTheDocument()
+    expect(screen.getByText(/Preferred Date/)).toBeInTheDocument()
+    expect(screen.getByText(/Preferred Time/)).toBeInTheDocument()
     expect(screen.getByText("Reason for Visit (Optional)")).toBeInTheDocument()
   })
 
@@ -62,48 +62,12 @@ describe("AppointmentDetailsStep", () => {
     expect(screen.getByRole("option", { name: "Procedure" })).toBeInTheDocument()
   })
 
-  it("allows selecting a date via calendar popover", async () => {
-    const user = userEvent.setup()
+  it("renders native date input for preferred date", () => {
+    render(<TestWrapper />)
 
-    function TestComponent() {
-      const form = useForm<Partial<BookingFormData>>({
-        defaultValues: {
-          consultationType: "",
-          preferredDate: "",
-          preferredTime: "",
-          reason: "",
-        },
-      })
-
-      React.useEffect(() => {
-        ;(window as any).testForm = form
-      }, [form])
-
-      return (
-        <Form {...form}>
-          <form>
-            <AppointmentDetailsStep form={form as any} />
-          </form>
-        </Form>
-      )
-    }
-
-    render(<TestComponent />)
-
-    // Click the date picker button to open the calendar popover
-    const dateButton = screen.getByRole("button", { name: /preferred date/i })
-    expect(dateButton).toBeInTheDocument()
-    await user.click(dateButton)
-
-    // Select a future day (28 is available in all months)
-    await waitFor(() => {
-      expect(screen.getByText("28")).toBeInTheDocument()
-    })
-    await user.click(screen.getByText("28"))
-
-    // Verify form value was set (should contain "28" as the day)
-    const form = (window as any).testForm
-    expect(form.getValues("preferredDate")).toContain("28")
+    const dateInput = screen.getByLabelText(/preferred date/i)
+    expect(dateInput).toBeInTheDocument()
+    expect(dateInput).toHaveAttribute("type", "date")
   })
 
   it("allows entering a reason for visit", async () => {
@@ -182,10 +146,11 @@ describe("AppointmentDetailsStep", () => {
     })
   })
 
-  it("renders date picker button with placeholder", () => {
+  it("sets min date to today to prevent past dates", () => {
     render(<TestWrapper />)
 
-    const dateButton = screen.getByRole("button", { name: /preferred date/i })
-    expect(dateButton).toBeInTheDocument()
+    const dateInput = screen.getByLabelText(/preferred date/i)
+    const today = new Date().toISOString().split("T")[0]
+    expect(dateInput).toHaveAttribute("min", today)
   })
 })

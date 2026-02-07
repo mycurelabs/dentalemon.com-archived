@@ -34,7 +34,7 @@ export function ContactInfoStep({ form }: ContactInfoStepProps) {
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name *</FormLabel>
+              <FormLabel>First Name <span className="text-red-600">*</span></FormLabel>
               <FormControl>
                 <Input placeholder="Juan" {...field} />
               </FormControl>
@@ -48,7 +48,7 @@ export function ContactInfoStep({ form }: ContactInfoStepProps) {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name *</FormLabel>
+              <FormLabel>Last Name <span className="text-red-600">*</span></FormLabel>
               <FormControl>
                 <Input placeholder="Dela Cruz" {...field} />
               </FormControl>
@@ -63,7 +63,7 @@ export function ContactInfoStep({ form }: ContactInfoStepProps) {
         name="phone"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Phone Number *</FormLabel>
+            <FormLabel>Phone Number <span className="text-red-600">*</span></FormLabel>
             <FormControl>
               <Input
                 type="tel"
@@ -82,7 +82,7 @@ export function ContactInfoStep({ form }: ContactInfoStepProps) {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email Address *</FormLabel>
+            <FormLabel>Email Address <span className="text-red-600">*</span></FormLabel>
             <FormControl>
               <Input
                 type="email"
@@ -108,7 +108,7 @@ export function ContactInfoStep({ form }: ContactInfoStepProps) {
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>
-                I understand this is an appointment request *
+                I understand this is an appointment request <span className="text-red-600">*</span>
               </FormLabel>
               <FormDescription>
                 I agree that this is an appointment request, not a confirmed booking.

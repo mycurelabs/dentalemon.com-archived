@@ -136,6 +136,10 @@ export function ClinicSchedules({
   clinics,
   onBookClick,
 }: ClinicSchedulesProps) {
+  if (clinics.length === 0) {
+    return null;
+  }
+
   // Single clinic — no accordion needed
   if (clinics.length === 1) {
     const clinic = clinics[0];

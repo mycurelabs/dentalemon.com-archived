@@ -6,14 +6,11 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import { Filter } from "lucide-react"
-import { cn } from "@/lib/utils"
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 interface FilterPanelProps {
   filters: DirectoryFilters
@@ -21,6 +18,8 @@ interface FilterPanelProps {
   specialties: string[]
   locations: string[]
   services: string[]
+  mobileOpen?: boolean
+  onMobileOpenChange?: (open: boolean) => void
 }
 
 interface FilterSectionProps {
@@ -162,17 +161,7 @@ function FilterPanelContent({
 }
 
 export function FilterPanel(props: FilterPanelProps) {
-  const [mounted, setMounted] = React.useState(false)
-
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const activeFilterCount =
-    props.filters.specialties.length +
-    props.filters.locations.length +
-    props.filters.services.length
-  const hasActiveFilters = activeFilterCount > 0
+  const { mobileOpen = false, onMobileOpenChange } = props
 
   return (
     <>
@@ -183,36 +172,23 @@ export function FilterPanel(props: FilterPanelProps) {
         </div>
       </div>
 
-      {/* Mobile: Sheet (Drawer) — render after mount to avoid Radix ID hydration mismatch */}
-      {mounted && (
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="default"
-                size="sm"
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 h-11 rounded-full px-5 shadow-lg bg-foreground text-background hover:bg-foreground/90 gap-2"
-              >
-                <Filter className="h-4 w-4" />
-                Filters
-                {hasActiveFilters && (
-                  <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-background text-foreground text-xs font-semibold">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-80 overflow-y-auto">
-              <SheetHeader>
-                <SheetTitle>Filters</SheetTitle>
-              </SheetHeader>
-              <div className="mt-6">
-                <FilterPanelContent {...props} />
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      )}
+      {/* Mobile: Dialog modal (triggered externally) */}
+      <Dialog open={mobileOpen} onOpenChange={onMobileOpenChange}>
+        <DialogContent className="sm:max-w-[400px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-sans">Filters</DialogTitle>
+          </DialogHeader>
+          <FilterPanelContent {...props} />
+          <div className="pt-4 border-t">
+            <Button
+              className="w-full rounded-lg bg-[#FFCC5E] text-black hover:bg-[#FFCC5E]/90"
+              onClick={() => onMobileOpenChange?.(false)}
+            >
+              Show Results
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

@@ -1313,5 +1313,344 @@ export const sampleDentists: Dentist[] = [
     featured: true,
     rating: 4.8,
     reviewCount: 195
+  },
+  {
+    id: "dentist-009",
+    slug: "dr-patricia-reyes",
+    name: "Dr. Patricia Reyes",
+    title: "DMD",
+    photo: "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?w=400&h=400&fit=crop",
+    specialty: "General Dentistry",
+    specialties: ["General Dentistry", "Preventive Care", "Cosmetic Dentistry"],
+    bio: "Dr. Patricia Reyes is a general dentist with 16 years of experience serving patients across Metro Manila. She practices at three clinic locations in Makati, Quezon City, and Cebu City, making quality dental care accessible to more communities. Dr. Reyes is known for her warm bedside manner and thorough approach to patient care. She holds advanced certifications in preventive and cosmetic dentistry and is committed to using the latest evidence-based techniques.",
+    yearsOfExperience: 16,
+    education: [
+      {
+        degree: "Doctor of Dental Medicine (DMD)",
+        institution: "University of the Philippines Manila",
+        year: 2010,
+        location: "Manila, Philippines"
+      },
+      {
+        degree: "Bachelor of Science in Biology",
+        institution: "De La Salle University",
+        year: 2006,
+        location: "Manila, Philippines"
+      }
+    ],
+    certifications: [
+      {
+        title: "Advanced Restorative Dentistry Certification",
+        issuingOrganization: "Academy of General Dentistry",
+        year: 2014
+      },
+      {
+        title: "Invisalign Certified Provider",
+        issuingOrganization: "Align Technology",
+        year: 2019
+      }
+    ],
+    affiliations: [
+      "Philippine Dental Association (PDA)",
+      "Academy of General Dentistry",
+      "Philippine College of Oral and Maxillofacial Surgeons"
+    ],
+    services: [
+      "Teeth Cleaning",
+      "Dental Fillings",
+      "Teeth Whitening",
+      "Dental Crowns",
+      "Root Canal Therapy",
+      "Dental Implants",
+      "Preventive Care",
+      "Veneers"
+    ],
+    clinics: [
+      {
+        id: "clinic-009a",
+        name: "Reyes Dental Care - Makati",
+        address: {
+          street: "Unit 18-B, Century City Mall, Kalayaan Avenue",
+          city: "Makati",
+          province: "Metro Manila",
+          postalCode: "1210",
+          country: "Philippines"
+        },
+        contact: {
+          phone: "+63 2 8812 3456",
+          email: "makati@reyesdentalcare.ph",
+          website: "https://reyesdentalcare.ph"
+        },
+        schedules: [
+          {
+            day: "Monday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "12:00" },
+              { start: "14:00", end: "18:00" }
+            ]
+          },
+          {
+            day: "Tuesday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "12:00" },
+              { start: "14:00", end: "18:00" }
+            ]
+          },
+          {
+            day: "Wednesday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Thursday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Friday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "12:00" },
+              { start: "14:00", end: "17:00" }
+            ]
+          },
+          {
+            day: "Saturday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "13:00" }
+            ]
+          },
+          {
+            day: "Sunday",
+            isOpen: false,
+            slots: []
+          }
+        ],
+        fees: [
+          {
+            consultationType: "Initial Consultation",
+            amount: 1500,
+            currency: "PHP",
+            notes: "Includes basic oral examination"
+          },
+          {
+            consultationType: "General Checkup",
+            amount: 1000,
+            currency: "PHP"
+          }
+        ]
+      },
+      {
+        id: "clinic-009b",
+        name: "Reyes Dental Care - Quezon City",
+        address: {
+          street: "3rd Floor, TriNoma Mall, EDSA corner North Avenue",
+          city: "Quezon City",
+          province: "Metro Manila",
+          postalCode: "1105",
+          country: "Philippines"
+        },
+        contact: {
+          phone: "+63 2 8735 6789",
+          email: "qc@reyesdentalcare.ph",
+          website: "https://reyesdentalcare.ph"
+        },
+        schedules: [
+          {
+            day: "Monday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Tuesday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Wednesday",
+            isOpen: true,
+            slots: [
+              { start: "10:00", end: "13:00" },
+              { start: "14:00", end: "19:00" }
+            ]
+          },
+          {
+            day: "Thursday",
+            isOpen: true,
+            slots: [
+              { start: "10:00", end: "13:00" },
+              { start: "14:00", end: "19:00" }
+            ]
+          },
+          {
+            day: "Friday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Saturday",
+            isOpen: true,
+            slots: [
+              { start: "10:00", end: "15:00" }
+            ]
+          },
+          {
+            day: "Sunday",
+            isOpen: false,
+            slots: []
+          }
+        ],
+        fees: [
+          {
+            consultationType: "Initial Consultation",
+            amount: 1500,
+            currency: "PHP",
+            notes: "Includes basic oral examination"
+          },
+          {
+            consultationType: "General Checkup",
+            amount: 1000,
+            currency: "PHP"
+          }
+        ]
+      },
+      {
+        id: "clinic-009c",
+        name: "Reyes Dental Care - Cebu",
+        address: {
+          street: "Unit 405, Ayala Center Cebu, Archbishop Reyes Avenue",
+          city: "Cebu City",
+          province: "Cebu",
+          postalCode: "6000",
+          country: "Philippines"
+        },
+        contact: {
+          phone: "+63 32 231 4567",
+          email: "cebu@reyesdentalcare.ph",
+          website: "https://reyesdentalcare.ph"
+        },
+        schedules: [
+          {
+            day: "Monday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "12:00" },
+              { start: "13:00", end: "17:00" }
+            ]
+          },
+          {
+            day: "Tuesday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "12:00" },
+              { start: "13:00", end: "17:00" }
+            ]
+          },
+          {
+            day: "Wednesday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Thursday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Friday",
+            isOpen: true,
+            slots: [
+              { start: "09:00", end: "12:00" },
+              { start: "13:00", end: "17:00" }
+            ]
+          },
+          {
+            day: "Saturday",
+            isOpen: false,
+            slots: []
+          },
+          {
+            day: "Sunday",
+            isOpen: false,
+            slots: []
+          }
+        ],
+        fees: [
+          {
+            consultationType: "Initial Consultation",
+            amount: 1200,
+            currency: "PHP",
+            notes: "Includes basic oral examination"
+          },
+          {
+            consultationType: "General Checkup",
+            amount: 800,
+            currency: "PHP"
+          }
+        ]
+      }
+    ],
+    languages: ["English", "Tagalog", "Cebuano"],
+    availability: {
+      date: "2026-02-11",
+      time: "09:00",
+      clinicId: "clinic-009a",
+      clinicName: "Reyes Dental Care - Makati"
+    },
+    faqs: [
+      {
+        question: "Which clinic location should I visit?",
+        answer: "You can visit any of our three locations in Makati, Quezon City, or Cebu City. Dr. Reyes rotates between clinics on different days, so choose the location and schedule that works best for you."
+      },
+      {
+        question: "Do you accept HMO cards?",
+        answer: "Yes, we accept major HMO cards at all three locations, including Maxicare, Medicard, Intellicare, and PhilHealth."
+      },
+      {
+        question: "Can I transfer my treatment between clinic locations?",
+        answer: "Absolutely! Your patient records are shared across all three clinics, so you can continue your treatment at any location."
+      }
+    ],
+    contact: {
+      phone: "+63 917 456 7890",
+      email: "dr.reyes@reyesdentalcare.ph"
+    },
+    verified: true,
+    featured: false,
+    rating: 4.7,
+    reviewCount: 163
+  },
+  {
+    id: "dentist-010",
+    slug: "dr-newly-registered",
+    name: "Dr. Newly Registered",
+    title: "",
+    photo: "",
+    specialty: "General Dentistry",
+    specialties: [],
+    bio: "",
+    yearsOfExperience: 0,
+    education: [],
+    certifications: [],
+    affiliations: [],
+    services: [],
+    clinics: [],
+    languages: [],
+    availability: {
+      date: "",
+      time: "",
+      clinicId: "",
+      clinicName: "",
+    },
+    faqs: [],
+    contact: {
+      phone: "",
+      email: "",
+    },
+    verified: false,
+    featured: false,
   }
 ];

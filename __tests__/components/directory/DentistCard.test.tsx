@@ -258,11 +258,12 @@ describe('DentistCard', () => {
         photo: '',
       }
 
-      render(<DentistCard dentist={dentistNoPhoto} viewMode="grid" />)
+      const { container } = render(<DentistCard dentist={dentistNoPhoto} viewMode="grid" />)
 
-      // Image should still render (with placeholder or empty src)
-      const image = screen.getByAltText(/Dr. Jane Smith - General Dentistry/i)
-      expect(image).toBeInTheDocument()
+      // Should render placeholder icon instead of image
+      expect(screen.queryByAltText(/Dr. Jane Smith/i)).not.toBeInTheDocument()
+      const placeholder = container.querySelector('.bg-neutral-100')
+      expect(placeholder).toBeInTheDocument()
     })
   })
 })
