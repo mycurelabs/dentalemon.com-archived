@@ -42,4 +42,12 @@ next-env.d.ts
 
 # Visual References
 .references
-.MYCURE_Design_System_Adaptation_Guide.md 
+.MYCURE_Design_System_Adaptation_Guide.md
+
+# Test artifacts
+playwright-report/
+test-results/
+screenshots/
+
+# Sauron session state
+.claude/sauron/
