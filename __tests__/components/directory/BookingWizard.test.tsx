@@ -4,19 +4,10 @@ import userEvent from "@testing-library/user-event"
 import { BookingWizard } from "@/components/directory/BookingWizard"
 import { Dentist } from "@/types/dentist"
 
-// Helper to select a date via the calendar popover
-async function selectDateViaCalendar(user: ReturnType<typeof userEvent.setup>) {
-  const dateButton = screen.getByRole("button", { name: /preferred date/i })
-  await user.click(dateButton)
-  await waitFor(() => {
-    expect(screen.getByText("28")).toBeInTheDocument()
-  })
-  // Use fireEvent.click for calendar day since userEvent has pointer-events issues in nested portals
-  fireEvent.click(screen.getByText("28"))
-  // Wait for popover to close and value to be set
-  await waitFor(() => {
-    expect(screen.getByRole("button", { name: /preferred date/i })).not.toHaveTextContent("Pick a date")
-  })
+// Helper to fill the native date input
+async function fillDateInput() {
+  const dateInput = screen.getByLabelText(/preferred date/i)
+  fireEvent.change(dateInput, { target: { value: "2026-03-28" } })
 }
 
 // Mock dentist data
@@ -145,7 +136,7 @@ describe("BookingWizard", () => {
     await user.click(consultationTypeButton)
     await user.click(screen.getByRole("option", { name: "General Consultation" }))
 
-    await selectDateViaCalendar(user)
+    await fillDateInput()
 
     const timeButton = screen.getByRole("combobox", { name: /preferred time/i })
     await user.click(timeButton)
@@ -189,7 +180,7 @@ describe("BookingWizard", () => {
     await user.click(consultationTypeButton)
     await user.click(screen.getByRole("option", { name: "General Consultation" }))
 
-    await selectDateViaCalendar(user)
+    await fillDateInput()
 
     const timeButton = screen.getByRole("combobox", { name: /preferred time/i })
     await user.click(timeButton)
@@ -260,7 +251,7 @@ describe("BookingWizard", () => {
     await user.click(consultationTypeButton)
     await user.click(screen.getByRole("option", { name: "General Consultation" }))
 
-    await selectDateViaCalendar(user)
+    await fillDateInput()
 
     const timeButton = screen.getByRole("combobox", { name: /preferred time/i })
     await user.click(timeButton)
@@ -337,7 +328,7 @@ describe("BookingWizard", () => {
     await user.click(consultationTypeButton)
     await user.click(screen.getByRole("option", { name: "General Consultation" }))
 
-    await selectDateViaCalendar(user)
+    await fillDateInput()
 
     const timeButton = screen.getByRole("combobox", { name: /preferred time/i })
     await user.click(timeButton)

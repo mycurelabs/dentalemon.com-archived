@@ -12,7 +12,8 @@ import {
   BookingWizard,
 } from "@/components/directory";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Grid3x3, List } from "lucide-react";
+import { Grid3x3, List, SlidersHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface DirectoryContentProps {
   initialDentists: Dentist[];
@@ -28,6 +29,7 @@ export function DirectoryContent({ initialDentists }: DirectoryContentProps) {
   });
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
   const [selectedDentistId, setSelectedDentistId] = React.useState<string | null>(null);
+  const [mobileFilterOpen, setMobileFilterOpen] = React.useState(false);
 
   // Extract unique filter options from all dentists
   const filterOptions = React.useMemo(() => {
@@ -180,13 +182,15 @@ export function DirectoryContent({ initialDentists }: DirectoryContentProps) {
       <section className="py-12 md:py-16">
         <div className="container px-4 md:px-6">
           <div className="flex gap-8">
-            {/* Sidebar Filter Panel (Desktop) / Sheet (Mobile) */}
+            {/* Sidebar Filter Panel (Desktop only) + mobile Dialog */}
             <FilterPanel
               filters={filters}
               onFilterChange={setFilters}
               specialties={filterOptions.specialties}
               locations={filterOptions.locations}
               services={filterOptions.services}
+              mobileOpen={mobileFilterOpen}
+              onMobileOpenChange={setMobileFilterOpen}
             />
 
             {/* Results Area */}
@@ -196,20 +200,29 @@ export function DirectoryContent({ initialDentists }: DirectoryContentProps) {
 
               {/* Results Header */}
               <div className="flex items-center justify-between mb-6">
-                <div>
+                <div className="flex items-center gap-3 flex-wrap">
                   <h2 className="text-2xl font-semibold">
                     {filteredDentists.length}{" "}
                     {filteredDentists.length === 1 ? "dentist" : "dentists"} found
                   </h2>
-                  {activeFilters.length > 0 && (
-                    <div className="mt-3">
-                      <ActiveFilters
-                        filters={activeFilters}
-                        onRemove={handleRemoveFilter}
-                      />
-                    </div>
-                  )}
                 </div>
+
+                <div className="flex items-center gap-2">
+                  {/* Mobile Filter Button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="md:hidden gap-2"
+                    onClick={() => setMobileFilterOpen(true)}
+                  >
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filters
+                    {activeFilters.length > 0 && (
+                      <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-foreground text-background text-xs font-medium">
+                        {activeFilters.length}
+                      </span>
+                    )}
+                  </Button>
 
                 {/* View Toggle — hidden on mobile where grid is always single-column */}
                 <ToggleGroup
@@ -228,7 +241,18 @@ export function DirectoryContent({ initialDentists }: DirectoryContentProps) {
                     <List className="h-4 w-4" />
                   </ToggleGroupItem>
                 </ToggleGroup>
+                </div>
               </div>
+
+              {/* Active Filters */}
+              {activeFilters.length > 0 && (
+                <div className="mb-6">
+                  <ActiveFilters
+                    filters={activeFilters}
+                    onRemove={handleRemoveFilter}
+                  />
+                </div>
+              )}
 
               {/* Dentist Grid */}
               <DentistGrid

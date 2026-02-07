@@ -14,6 +14,11 @@ const TRUNCATE_LENGTH = 200;
 
 export function ProfileBio({ bio }: ProfileBioProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  if (!bio) {
+    return null;
+  }
+
   const shouldTruncate = bio.length > TRUNCATE_LENGTH;
 
   const displayedBio = shouldTruncate && !isExpanded

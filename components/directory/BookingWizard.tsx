@@ -89,7 +89,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
       email: "",
       consent: false,
     },
-    mode: "onTouched",
+    mode: "onSubmit",
   })
 
   const validateCurrentStep = async () => {
@@ -114,14 +114,7 @@ export function BookingWizard({ dentist, isOpen, onClose }: BookingWizardProps) 
   const handleNext = async () => {
     const isValid = await validateCurrentStep()
     if (isValid && currentStep < 3) {
-      const nextStep = currentStep + 1
-      // Clear errors for the next step's fields so they don't show on arrival
-      if (nextStep === 2) {
-        form.clearErrors(["consultationType", "preferredDate", "preferredTime"])
-      } else if (nextStep === 3) {
-        form.clearErrors(["firstName", "lastName", "phone", "email", "consent"])
-      }
-      setCurrentStep(nextStep)
+      setCurrentStep(currentStep + 1)
     }
   }
 

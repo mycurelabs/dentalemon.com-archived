@@ -4,7 +4,7 @@ import { Dentist } from "@/types/dentist";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, User } from "lucide-react";
 
 interface ProfileHeaderProps {
   dentist: Dentist;
@@ -24,14 +24,20 @@ export function ProfileHeader({ dentist }: ProfileHeaderProps) {
       <div className="flex flex-col md:flex-row gap-6">
         {/* Photo */}
         <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden flex-shrink-0 mx-auto md:mx-0 ring-2 ring-neutral-100 dark:ring-neutral-800">
-          <Image
-            src={dentist.photo || "/placeholder-dentist.jpg"}
-            alt={`${dentist.name} - ${dentist.specialty}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 112px, 144px"
-            priority
-          />
+          {dentist.photo ? (
+            <Image
+              src={dentist.photo}
+              alt={`${dentist.name} - ${dentist.specialty}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 112px, 144px"
+              priority
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800">
+              <User className="h-12 w-12 md:h-16 md:w-16 text-neutral-400 dark:text-neutral-500" />
+            </div>
+          )}
         </div>
 
         {/* Info */}
@@ -85,10 +91,12 @@ export function ProfileHeader({ dentist }: ProfileHeaderProps) {
           </div>
 
           {/* Languages — simple comma-separated text */}
-          <p className="text-sm text-muted-foreground">
-            <span className="text-foreground font-medium">Languages:</span>{" "}
-            {dentist.languages.join(", ")}
-          </p>
+          {dentist.languages.length > 0 && (
+            <p className="text-sm text-muted-foreground">
+              <span className="text-foreground font-medium">Languages:</span>{" "}
+              {dentist.languages.join(", ")}
+            </p>
+          )}
         </div>
       </div>
     </motion.div>

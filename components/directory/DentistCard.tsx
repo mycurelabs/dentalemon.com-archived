@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { MapPin } from "lucide-react";
+import { MapPin, User } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,13 +44,19 @@ export function DentistCard({ dentist, viewMode, onBookClick }: DentistCardProps
           "relative bg-muted",
           isGridView ? "w-full h-48" : "w-48 h-auto flex-shrink-0"
         )}>
-          <Image
-            src={dentist.photo || "/placeholder-dentist.jpg"}
-            alt={`${dentist.name} - ${dentist.specialty}`}
-            fill
-            className="object-cover"
-            sizes={isGridView ? "(max-width: 768px) 100vw, 33vw" : "192px"}
-          />
+          {dentist.photo ? (
+            <Image
+              src={dentist.photo}
+              alt={`${dentist.name} - ${dentist.specialty}`}
+              fill
+              className="object-cover"
+              sizes={isGridView ? "(max-width: 768px) 100vw, 33vw" : "192px"}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800">
+              <User className="h-16 w-16 text-neutral-400 dark:text-neutral-500" />
+            </div>
+          )}
         </div>
 
         {/* Content Section */}

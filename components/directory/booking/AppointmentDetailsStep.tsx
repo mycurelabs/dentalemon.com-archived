@@ -2,8 +2,6 @@
 
 import * as React from "react"
 import { UseFormReturn } from "react-hook-form"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
 import {
   FormControl,
   FormField,
@@ -18,11 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
 import { BookingFormData } from "../BookingWizard"
 
 interface AppointmentDetailsStepProps {
@@ -44,6 +39,8 @@ const timeSlots = [
 ]
 
 export function AppointmentDetailsStep({ form }: AppointmentDetailsStepProps) {
+  const today = new Date().toISOString().split("T")[0]
+
   return (
     <div className="space-y-6">
       <div>
@@ -58,7 +55,7 @@ export function AppointmentDetailsStep({ form }: AppointmentDetailsStepProps) {
         name="consultationType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Consultation Type *</FormLabel>
+            <FormLabel>Consultation Type <span className="text-red-600">*</span></FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -82,40 +79,15 @@ export function AppointmentDetailsStep({ form }: AppointmentDetailsStepProps) {
         control={form.control}
         name="preferredDate"
         render={({ field }) => (
-          <FormItem className="flex flex-col">
-            <FormLabel>Preferred Date *</FormLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <FormControl>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-[240px] pl-3 text-left font-normal",
-                      !field.value && "text-muted-foreground"
-                    )}
-                  >
-                    {field.value ? (
-                      format(new Date(field.value), "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={field.value ? new Date(field.value) : undefined}
-                  onSelect={(date) => {
-                    if (date) {
-                      field.onChange(format(date, "yyyy-MM-dd"))
-                    }
-                  }}
-                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                />
-              </PopoverContent>
-            </Popover>
+          <FormItem>
+            <FormLabel>Preferred Date <span className="text-red-600">*</span></FormLabel>
+            <FormControl>
+              <Input
+                type="date"
+                min={today}
+                {...field}
+              />
+            </FormControl>
             <FormMessage />
           </FormItem>
         )}
@@ -126,7 +98,7 @@ export function AppointmentDetailsStep({ form }: AppointmentDetailsStepProps) {
         name="preferredTime"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Preferred Time *</FormLabel>
+            <FormLabel>Preferred Time <span className="text-red-600">*</span></FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>

@@ -21,28 +21,35 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn("p-4", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row gap-4",
+        months: "flex flex-col sm:flex-row gap-2",
         month: "flex flex-col gap-4",
-        month_caption: "flex justify-center pt-1 relative items-center w-full",
-        caption_label: "text-sm font-medium",
-        nav: "flex items-center gap-1",
+        month_caption: "flex justify-center relative items-center w-full h-10 px-10",
+        caption_label: "text-sm font-semibold",
+        nav: "flex items-center",
         button_previous: cn(
-          buttonVariants({ variant: "outline" }),
-          "absolute left-1 top-0 h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 z-10"
+          "absolute left-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 z-10",
+          "inline-flex items-center justify-center rounded-md",
+          "text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer"
         ),
         button_next: cn(
-          buttonVariants({ variant: "outline" }),
-          "absolute right-1 top-0 h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 z-10"
+          "absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 z-10",
+          "inline-flex items-center justify-center rounded-md",
+          "text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer"
         ),
         month_grid: "w-full border-collapse",
         weekdays: "",
         weekday:
-          "text-muted-foreground font-normal text-[0.8rem] h-10 w-10 text-center",
+          "text-muted-foreground font-normal text-[0.8rem] pb-2 text-center",
         week: "",
-        day: "relative h-10 w-10 p-0 text-center text-sm focus-within:relative focus-within:z-20",
+        day: cn(
+          "relative p-0.5 text-center text-sm",
+          "focus-within:relative focus-within:z-20"
+        ),
         day_button: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-10 w-10 p-0 font-normal cursor-pointer hover:bg-accent hover:text-accent-foreground aria-selected:opacity-100"
+          "h-9 w-9 p-0 font-normal cursor-pointer",
+          "hover:bg-accent hover:text-accent-foreground",
+          "aria-selected:opacity-100"
         ),
         selected:
           "[&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary [&>button]:hover:text-primary-foreground [&>button]:focus:bg-primary [&>button]:focus:text-primary-foreground",
