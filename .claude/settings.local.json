@@ -11,7 +11,11 @@
       "Bash(claude mcp:*)",
       "Bash(cat:*)",
       "Bash(npx playwright install chromium)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(claude:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_evaluate"
     ],
     "deny": [],
     "ask": []
