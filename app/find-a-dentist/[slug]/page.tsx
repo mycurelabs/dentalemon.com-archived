@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { sampleDentists } from "@/data/dentists/sample-dentists";
 import { DentistProfileClient } from "./DentistProfileClient";
 import { generateDentistSchema, generateDentistBreadcrumbSchema } from "@/lib/seo/generateDentistSchema";
+import { ScrollProgress } from "@/components/directory/ScrollProgress";
 
 interface PageProps {
   params: Promise<{
@@ -64,19 +65,16 @@ export default async function DentistProfilePage({ params }: PageProps) {
         }}
       />
 
-      {/* Breadcrumb Navigation */}
-      <nav className="sticky top-0 z-40 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800" aria-label="Breadcrumb">
+      {/* Breadcrumb Navigation — merged below DirectoryHeader */}
+      <nav className="sticky top-16 z-40 relative bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800" aria-label="Breadcrumb">
         <ol className="container px-4 md:px-6 flex items-center gap-1.5 text-sm text-muted-foreground py-3">
-          <li>
-            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
-          </li>
-          <li><ChevronRight className="h-3.5 w-3.5" /></li>
           <li>
             <Link href="/find-a-dentist" className="hover:text-foreground transition-colors">Find a Dentist</Link>
           </li>
           <li><ChevronRight className="h-3.5 w-3.5" /></li>
           <li className="text-foreground font-medium truncate max-w-[200px]">{dentist.name}</li>
         </ol>
+        <ScrollProgress />
       </nav>
 
       {/* Main Content */}
