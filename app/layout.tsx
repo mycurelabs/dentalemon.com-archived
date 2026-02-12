@@ -55,12 +55,21 @@ export const metadata: Metadata = {
     siteName: brandConfig.company.displayName,
     title: brandConfig.seo.defaultTitle,
     description: brandConfig.seo.defaultDescription,
+    images: [
+      {
+        url: brandConfig.assets.ogImage,
+        width: 1200,
+        height: 630,
+        alt: `${brandConfig.company.displayName} - ${brandConfig.company.tagline}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: brandConfig.seo.defaultTitle,
     description: brandConfig.seo.defaultDescription,
     creator: brandConfig.seo.twitterHandle ? `@${brandConfig.seo.twitterHandle}` : undefined,
+    images: [brandConfig.assets.ogImage],
   },
   alternates: {
     canonical: brandConfig.urls.website,

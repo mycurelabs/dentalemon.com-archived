@@ -4,8 +4,7 @@ import { sampleDentists } from "@/data/dentists/sample-dentists";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = brandConfig.urls.website;
-  // Use fixed date to prevent unnecessary re-crawling on each build
-  const lastUpdate = new Date("2025-01-20");
+  const lastUpdate = new Date();
   const dentistUpdate = new Date("2026-02-07");
 
   // Static pages
