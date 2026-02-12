@@ -51,8 +51,9 @@ async function fetchRuntimeConfig(): Promise<RuntimeConfig> {
       }
 
       const data = await response.json()
+      const fetchedUrl = data.accountUrl || defaultConfig.accountUrl
       cachedConfig = {
-        accountUrl: data.accountUrl || defaultConfig.accountUrl,
+        accountUrl: isValidHttpsUrl(fetchedUrl) ? fetchedUrl : defaultConfig.accountUrl,
       }
       return cachedConfig
     } catch (err) {
@@ -111,9 +112,29 @@ export function useRuntimeConfig(): UseRuntimeConfigResult {
 }
 
 /**
+ * Validate that a URL is HTTPS and well-formed
+ */
+function isValidHttpsUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === "https:"
+  } catch {
+    return false
+  }
+}
+
+/**
  * Build sign-up URL with package redirect
  */
 export function buildSignUpUrl(accountUrl: string, packageId?: string): string {
+  if (!isValidHttpsUrl(accountUrl)) {
+    throw new Error("Invalid account URL: must be a valid HTTPS URL")
+  }
+
+  if (packageId && !/^[a-zA-Z0-9\-_]+$/.test(packageId)) {
+    throw new Error("Invalid package ID: must be alphanumeric with hyphens/underscores only")
+  }
+
   if (!packageId) {
     return `${accountUrl}/auth/sign-up`
   }
