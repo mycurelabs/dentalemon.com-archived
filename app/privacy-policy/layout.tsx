@@ -5,10 +5,10 @@ const { company, urls, seo } = brandConfig
 
 export const metadata: Metadata = {
   title: `${company.displayName} - Privacy Policy`,
-  description: `Privacy Policy for ${company.displayName} healthcare management services. Learn how we protect and handle your data.`,
+  description: `Privacy Policy for ${company.displayName} dental practice management software. Learn how we protect patient data, ensure HIPAA compliance, and handle your information securely.`,
   openGraph: {
     title: `${company.displayName} - Privacy Policy`,
-    description: `Privacy Policy for ${company.displayName} healthcare management services. Learn how we protect and handle your data.`,
+    description: `Privacy Policy for ${company.displayName} dental practice management software. Learn how we protect patient data, ensure HIPAA compliance, and handle your information securely.`,
     url: `${urls.website}${urls.privacyPath}`,
     siteName: company.displayName,
     locale: seo.locale,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `${company.displayName} - Privacy Policy`,
-    description: `Privacy Policy for ${company.displayName} healthcare management services. Learn how we protect and handle your data.`,
+    description: `Privacy Policy for ${company.displayName} dental practice management software. Learn how we protect patient data, ensure HIPAA compliance, and handle your information securely.`,
   },
   alternates: {
     canonical: `${urls.website}${urls.privacyPath}`,

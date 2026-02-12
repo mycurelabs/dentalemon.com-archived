@@ -31,11 +31,26 @@ yarn-error.log*
 next-env.d.ts
 
 .DS_Store
+._*
 
 # IDE configs
 .idea/
 .vscode/settings.json
 
 # Claude Code local settings
+.claude
 .claude/settings.local.json
 .playwright-mcp/
+
+# Internal notes and references
+.docs/
+.references
+.MYCURE_Design_System_Adaptation_Guide.md
+
+# Test artifacts
+playwright-report/
+test-results/
+screenshots/
+
+# Sauron session state
+.claude/sauron/
