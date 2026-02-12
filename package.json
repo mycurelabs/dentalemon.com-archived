@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Brand-agnostic healthcare website template with HIPAA-compliant terminology and configurable branding",
   "private": true,
+  "packageManager": "pnpm@9.12.1",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
