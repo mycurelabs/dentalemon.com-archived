@@ -40,6 +40,11 @@ export function ProductHeader() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
+              <Link href="/find-a-dentist" className="group inline-flex h-9 w-max items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus:bg-accent focus:text-foreground focus:outline-none">
+                Find a Dentist
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               <Link href="/#faq" className="group inline-flex h-9 w-max items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus:bg-accent focus:text-foreground focus:outline-none">
                 FAQs
               </Link>
