@@ -1,12 +1,12 @@
 # TOPSI Healthcare Website Template
 
-A brand-agnostic healthcare website template built with Next.js 14, Tailwind CSS, and shadcn/ui. Features HIPAA-compliant terminology, patient safety language, and configurable branding.
+A brand-agnostic healthcare website template built with Next.js 16, Tailwind CSS, and shadcn/ui. Features HIPAA-compliant terminology, patient safety language, and configurable branding.
 
 ## Features
 
 - **Brand Configuration**: Centralized brand config (`config/brand.ts`) for easy customization
 - **Healthcare-Ready**: HIPAA compliance messaging, clinical terminology, patient-centric UX
-- **Modern Stack**: Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- **Modern Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS, shadcn/ui
 - **Offline-First**: Built-in offline capability messaging and patterns
 - **SEO Optimized**: JSON-LD structured data, OpenGraph, Twitter cards
 - **Responsive**: Mobile-first design with WCAG 2.2 AA accessibility
@@ -97,22 +97,15 @@ assets: {
 topsi-template.com/
 ├── app/                    # Next.js App Router pages
 │   ├── (home)/            # Landing page
-│   ├── booking/           # Booking product page
-│   ├── clinics/           # Clinics product page
-│   ├── corporate/         # Corporate health page
-│   ├── diagnostics/       # Diagnostics page
-│   ├── mobile-labs/       # Mobile labs page
-│   ├── skin/              # Skin & aesthetics page
-│   ├── telehealth/        # Telehealth page
-│   ├── our-story/         # About page
 │   ├── privacy-policy/    # Privacy policy
 │   ├── terms-and-conditions/
+│   ├── api/               # API routes
 │   ├── globals.css        # Global styles + CSS variables
 │   └── layout.tsx         # Root layout with metadata
 ├── components/
 │   ├── sections/          # Page sections (Footer, headers)
-│   ├── ui/                # shadcn/ui components
-│   ├── magicui/           # Animation components
+│   ├── ui/                # shadcn/ui components (12 components)
+│   ├── magicui/           # Animation components (8 components)
 │   └── structured-data.tsx # JSON-LD schemas
 ├── config/
 │   ├── brand.ts           # Main brand configuration
@@ -157,10 +150,8 @@ For advanced color customization, edit CSS variables in `app/globals.css`:
 
 ### 4. Update Page Content
 
-Each product page has a `data.ts` file with content configuration:
+Each page has a `data.ts` file with content configuration:
 - `app/(home)/data.ts` - Landing page content
-- `app/clinics/data.ts` - Clinics page content
-- etc.
 
 Content automatically uses your brand name from the config.
 
@@ -181,7 +172,7 @@ The following terminology is healthcare-specific and intentionally NOT configura
 
 ```bash
 # Install Vercel CLI
-npm i -g vercel
+pnpm add -g vercel
 
 # Deploy
 vercel
@@ -198,12 +189,12 @@ pnpm start
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS 3.4
-- **Components**: shadcn/ui (47+ components)
+- **Components**: shadcn/ui (12 components)
 - **Animations**: Framer Motion
-- **Analytics**: Vercel Analytics (optional)
+- **Analytics**: Vercel Analytics
 
 ## License
 
