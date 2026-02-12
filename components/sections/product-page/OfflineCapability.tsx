@@ -45,7 +45,7 @@ export function OfflineCapability() {
           >
             <div className="overflow-hidden rounded-2xl">
               <video
-                src="/Features Photos/Built for Modern Teams/syncbase-demo.mp4"
+                src="/features/mycure-syncbase-demo.mp4"
                 autoPlay
                 muted
                 loop
