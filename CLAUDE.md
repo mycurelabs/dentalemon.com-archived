@@ -4,49 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a healthcare management SaaS website template built with Next.js 14, TypeScript, and the App Router architecture. The template provides comprehensive clinic and healthcare management marketing pages that can be customized via `config/brand.ts`.
+This is a healthcare management SaaS website template built with Next.js 16, TypeScript, and the App Router architecture. The template provides a customizable healthcare website foundation that can be configured via `config/brand.ts`.
 
 ## Development Commands
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run development server (port 3000)
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Start production server
-npm run start
+pnpm start
 
 # Run linting
-npm run lint
+pnpm lint
 ```
 
-**Note**: This project uses npm, not pnpm or yarn.
+**Note**: This project uses pnpm, not npm or yarn.
 
 ## Architecture Overview
-
-### Page Layout System
-
-The project uses 5 distinct layout patterns (documented in `PAGE_LAYOUTS.md`):
-
-1. **landing-style**: Complex marketing pages with heavy animations
-2. **document-style**: Long-form content with sidebar navigation and scrollspy
-3. **product-style**: Product marketing with sticky scroll, NumberTicker stats, and conversion optimization
-4. **feature-style**: Clean SaaS feature pages with 2x2 grids and FAQ sections
-5. **download-style**: Platform download pages with tab navigation
-
-### Component Patterns
-
-Key reusable patterns (documented in `COMPONENT_PATTERNS.md`):
-- **AnimatedShinyText**: Badge-style product positioning
-- **ShimmerButton**: Primary CTA buttons with shimmer effect
-- **NumberTicker**: Animated statistics with staggered delays
-- **Scrollytelling**: Sticky scroll with progressive content reveal
-- **Card Grids**: Responsive layouts (2x2, 2x3, 1x3)
 
 ### Animation Strategy
 - Viewport-triggered animations using Framer Motion
@@ -56,25 +37,35 @@ Key reusable patterns (documented in `COMPONENT_PATTERNS.md`):
 
 ## Build Configuration
 
-The project has relaxed build settings in `next.config.mjs`:
-- ESLint errors ignored during builds
-- TypeScript errors ignored during builds
-- Images are unoptimized
+The project has conditional TypeScript settings in `next.config.mjs`:
+- **TypeScript errors**: Only ignored in non-production builds (`ignoreBuildErrors: process.env.NODE_ENV !== 'production'`)
+- **ESLint**: Config removed in Next.js 16 — use ESLint directly (no eslint setting in next.config.mjs)
+- **Image optimization**: Enabled with AVIF and WebP formats (`formats: ['image/avif', 'image/webp']`)
+- **Security headers**: Comprehensive CSP, X-Frame-Options, HSTS, and other security headers
+- **API rewrites**: Conditional rewrites to backend API when API_URL is configured
 
-This configuration prioritizes rapid development and deployment.
+This configuration balances development speed with production quality.
 
 ## Component System
 
 ### shadcn/ui Integration
-- 47+ pre-installed components in `/components/ui/`
-- Configuration in `components.json` (note: references `tailwind.config.ts` but actual file is `.js`)
+- 12 components in `/components/ui/`: accordion, button, card, input, label, marquee, navigation-menu, sheet, skeleton, slider, tabs, tooltip
+- Configuration in `components.json`
 - To add new components: `npx shadcn-ui@latest add <component-name>`
+
+### MagicUI Components
+- 8 custom animated components in `/components/magicui/`: animated-gradient-text, animated-shiny-text, dot-pattern, number-ticker, rainbow-button, scroll-progress, shimmer-button, sparkles-text
+- Key patterns:
+  - **AnimatedShinyText**: Badge-style product positioning
+  - **ShimmerButton**: Primary CTA buttons with shimmer effect
+  - **NumberTicker**: Animated statistics with staggered delays
+  - **RainbowButton**: Gradient-animated call-to-action button
 
 ### Component Organization
 - **UI Components** (`/components/ui/`): shadcn/ui primitives
 - **Magic UI** (`/components/magicui/`): Custom animated components
 - **Sections** (`/components/sections/`): Reusable page sections
-- **Hooks** (`/hooks/` and `/components/ui/`): Custom React hooks (duplicated)
+- **Hooks** (`/hooks/`): Custom React hooks
 
 ## Styling System
 
@@ -93,43 +84,32 @@ This configuration prioritizes rapid development and deployment.
 
 ## Page Routes
 
-### Main Pages
-- `/` - Landing page (landing-style)
-- `/download` - Platform downloads (download-style)
+The project currently has 3 main routes:
 
-### Product Pages (product-style)
-- `/clinics` - Clinics product page (definitive product-style standard)
-- `/diagnostics` - Diagnostic services
-- `/telehealth` - Telehealth features (feature-style)
-- `/booking` - Booking system (feature-style)
-
-### Content Pages (document-style)
-- `/privacy-policy` - Privacy policy
+- `/` - Homepage with hero, features, and marketing content
+- `/privacy-policy` - Privacy policy and data handling information
 - `/terms-and-conditions` - Terms of service
-- `/our-story` - Company story
-- `/syncbase-technology` - Technology explanation
-
-### Specialty Pages
-- `/skin` - Dermatology
-- `/corporate` - Corporate solutions
-- `/mobile-labs` - Mobile laboratory services
 
 ## Key Dependencies
 
 ### Core Framework
-- Next.js 14.2.16 with App Router
-- React 18 with TypeScript
+- Next.js ^16.1.4 with App Router
+- React ^19.2.3 with TypeScript ^5
 - Tailwind CSS with tailwindcss-animate
 
 ### UI Libraries
-- shadcn/ui components (47+ components)
+- shadcn/ui components (12 components)
 - Framer Motion for animations
-- GSAP for advanced animations
-- @bsmnt/scrollytelling for sticky scroll
+- Lucide React for icons
+- Radix UI primitives (accordion, dialog, navigation-menu, tabs, tooltip, etc.)
 
 ### Utilities
 - React Hook Form + Zod for forms
-- Recharts for data visualization
-- Sonner for toast notifications
-- date-fns for date handling
 - clsx + tailwind-merge for styling
+- class-variance-authority for component variants
+- embla-carousel-react for carousels
+- next-themes for dark mode
+
+### Analytics & Performance
+- @vercel/analytics for user analytics
+- @vercel/speed-insights for performance monitoring

@@ -54,46 +54,19 @@ export function MobileNav({ isOpen, onOpenChange }: MobileNavProps) {
               How it Works
             </Link>
             <Link
+              href="/find-a-dentist"
+              onClick={handleLinkClick}
+              className="flex items-center min-h-[44px] px-2 text-base font-medium hover:text-primary transition-colors"
+            >
+              Find a Dentist
+            </Link>
+            <Link
               href="/#faq"
               onClick={handleLinkClick}
               className="flex items-center min-h-[44px] px-2 text-base font-medium hover:text-primary transition-colors"
             >
               FAQs
             </Link>
-          </div>
-
-          {/* Features Section */}
-          <div className="flex flex-col gap-1">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 mb-2">
-              Features
-            </span>
-            {navigationConfig.features.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={handleLinkClick}
-                className="flex items-center min-h-[44px] px-2 text-base font-medium hover:text-primary transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Solutions Section */}
-          <div className="flex flex-col gap-1">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 mb-2">
-              Solutions
-            </span>
-            {navigationConfig.solutions.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={handleLinkClick}
-                className="flex items-center min-h-[44px] px-2 text-base font-medium hover:text-primary transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
           </div>
 
           {/* CTA Section */}
